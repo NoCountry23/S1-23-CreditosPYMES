@@ -32,15 +32,18 @@ export function SignUpForm({
     email: string
     password: string
     repeatPassword: string
+    role: string
   }>()
   const handleSignUp = async ({
     email,
     password,
     repeatPassword,
+    role,
   }: {
     email: string
     password: string
     repeatPassword: string
+    role: string
   }) => {
     const supabase = createClient()
     setIsLoading(true)
@@ -58,6 +61,9 @@ export function SignUpForm({
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/protected`,
+          data: {
+            role,
+          },
         },
       })
       if (error) throw error
@@ -147,6 +153,17 @@ export function SignUpForm({
                   </p>
                 )}
               </div>
+              <fieldset className='fieldset'>
+                <legend className='fieldset-legend'>Role</legend>
+                <select
+                  defaultValue='client'
+                  className='select'
+                  {...register('role')}
+                >
+                  <option value={'client'}>Cliente</option>
+                  <option value={'operator'}>Operador</option>
+                </select>
+              </fieldset>
               {error && <p className='text-sm text-red-500'>{error}</p>}
               <Button type='submit' className='w-full' disabled={isLoading}>
                 {isLoading ? 'Creating an account...' : 'Sign up'}
