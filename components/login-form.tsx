@@ -47,8 +47,8 @@ export function LoginForm({
       // Update this route to redirect to an authenticated route. The user already has an active session.
       // router.push('/protected')
 
-      if (role === 'admin') {
-        router.push('/dashboard/admin') //operador
+      if (role === 'operator') {
+        router.push('/dashboard/operator') //operador
       } else if (role === 'client') {
         router.push('/dashboard/client') //cliente Pymes
       } else{
