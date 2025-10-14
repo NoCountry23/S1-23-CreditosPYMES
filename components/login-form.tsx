@@ -39,20 +39,21 @@ export function LoginForm({
 
     try {
       // const { error } = await supabase.auth.signInWithPassword(data)
-      const {data: authData, error} = await supabase.auth.signInWithPassword(data)
+      const { data: authData, error } = await supabase.auth.signInWithPassword(
+        data
+      )
       if (error) throw error
 
       const user = authData.user
-      const role = user?.user_metadata.role
       // Update this route to redirect to an authenticated route. The user already has an active session.
       // router.push('/protected')
 
-      if (role === 'operator') {
-        router.push('/dashboard/operator') //operador
-      } else if (role === 'client') {
-        router.push('/dashboard/client') //cliente Pymes
-      } else{
-        setError('Tu cuenta no tiene un rol asignado. Contacta al administrador.')
+      if (user) {
+        router.push('/')
+      } else {
+        setError(
+          'Tu cuenta no tiene un rol asignado. Contacta al administrador.'
+        )
         await supabase.auth.signOut()
         return
       }
