@@ -1,27 +1,18 @@
+import DashboardClient from '@/components/DashboardClient'
+import DashboardOperator from '@/components/DashboardOperator'
+import Landing from '@/components/Landing'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function Home() {
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser()
   if (data.user === null) {
-    return (
-      <main className='min-h-screen flex flex-col items-center'>
-        <p>You are not signed in</p>
-      </main>
-    )
+    return <Landing />
   }
   if (data.user.user_metadata.role === 'operator') {
-    return (
-      <main className='min-h-screen flex flex-col items-center'>
-        <p>You are signed in as operator</p>
-      </main>
-    )
+    return <DashboardOperator />
   }
   if (data.user.user_metadata.role === 'client') {
-    return (
-      <main className='min-h-screen flex flex-col items-center'>
-        <p>You are signed in as client</p>
-      </main>
-    )
+    return <DashboardClient />
   }
 }
