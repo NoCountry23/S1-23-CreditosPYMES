@@ -1,17 +1,18 @@
-// import { DeployButton } from "@/components/deploy-button";
-// import { EnvVarWarning } from "@/components/env-var-warning";
-// import { AuthButton } from "@/components/auth-button";
-// import { Hero } from "@/components/hero";
-// import { ThemeSwitcher } from "@/components/theme-switcher";
-// import { ConnectSupabaseSteps } from "@/components/tutorial/connect-supabase-steps";
-// import { SignUpUserSteps } from "@/components/tutorial/sign-up-user-steps";
-// import { hasEnvVars } from "@/lib/utils";
-// import Link from "next/link";
+import DashboardClient from '@/components/DashboardClient'
+import DashboardOperator from '@/components/DashboardOperator'
+import Landing from '@/components/Landing'
+import { createClient } from '@/lib/supabase/server'
 
-export default function Home() {
-  return (
-    <main>
-      HI
-    </main>
-  );
+export default async function Home() {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
+  if (data.user === null) {
+    return <Landing />
+  }
+  if (data.user.user_metadata.role === 'operator') {
+    return <DashboardOperator />
+  }
+  if (data.user.user_metadata.role === 'client') {
+    return <DashboardClient />
+  }
 }
