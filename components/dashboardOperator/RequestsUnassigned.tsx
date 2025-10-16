@@ -71,7 +71,7 @@ export default function RequestsUnassigned() {
     )
   }
   return (
-    <div className='space-y-4'>
+    <div className='space-y-4 '>
       {/* Search and Filter */}
       <div className='flex gap-4 mb-6'>
         <div className='flex-1 relative'>

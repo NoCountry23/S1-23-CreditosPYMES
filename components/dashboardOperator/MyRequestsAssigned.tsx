@@ -67,34 +67,6 @@ export default function MyRequestsAssigned() {
   const handleViewDetails = (request: { id: string }) => {
     setSelectedRequest(request)
   }
-  // const getStatusBadge = (status) => {
-  //   const config = {
-  //     in_review: {
-  //       text: 'En Revisión',
-  //       class: 'bg-blue-100 text-blue-800',
-  //       icon: <Clock className='w-3 h-3' />,
-  //     },
-  //     approved: {
-  //       text: 'Aprobado',
-  //       class: 'bg-green-100 text-green-800',
-  //       icon: <CheckCircle className='w-3 h-3' />,
-  //     },
-  //     rejected: {
-  //       text: 'Rechazado',
-  //       class: 'bg-red-100 text-red-800',
-  //       icon: <XCircle className='w-3 h-3' />,
-  //     },
-  //   }
-  //   const c = config[status]
-  //   return (
-  //     <span
-  //       className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${c.class}`}
-  //     >
-  //       {c.icon}
-  //       {c.text}
-  //     </span>
-  //   )
-  // }
   return (
     <div className='space-y-4'>
       {/* Search */}

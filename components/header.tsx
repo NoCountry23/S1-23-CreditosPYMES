@@ -1,87 +1,51 @@
+'use client'
+import React, { useEffect, useState } from 'react'
+import { ThemeSwitcher } from './theme-switcher'
 import Link from 'next/link'
-import React from 'react'
-import { hasEnvVars } from '@/lib/utils'
+import { Plus } from 'lucide-react'
 import { AuthButton } from './auth-button'
-import { EnvVarWarning } from './env-var-warning'
-import { Box } from 'lucide-react'
-import MenuHeaderMobile from './MenuHeaderMobile'
+import { createClient } from '@/lib/supabase/client'
+import { User } from '@supabase/supabase-js'
 
 export default function Header() {
+  const supabase = createClient() // cliente de navegador
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    // obtener sesión/usuario inicial
+    supabase.auth.getUser().then(({ data }) => setUser(data?.user ?? null))
+
+    // suscripción a cambios de auth
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null)
+      }
+    )
+    return () => listener.subscription.unsubscribe()
+  }, [supabase])
+
   return (
-    <header className='relative'>
-      <div className='navbar bg-background shadow-sm px-5 md:px-16 py-4'>
-        <div className='navbar-start'>
-          <div>
-            <Link href='/' className='btn btn-ghost text-xl'>
-              Logo
-            </Link>
-          </div>
-          <div className='hidden md:flex w-full'>
-            <ul className='menu menu-horizontal px-1 w-full'>
-              <li>
-                <Link href={'/prestamos'}>Prestamos</Link>
-              </li>
-              <li>
-                <Link href={'/servicios'}>Servicios</Link>
-              </li>
-              <li>
-                <Link href={'/ayuda'}>Ayuda</Link>
-              </li>
-              <li className='static'>
-                <details className='static'>
-                  <summary>Más</summary>
-                  <div
-                    className={`overflow-hidden  absolute top-full bg-background shadow-md rounded-md w-full px-16 left-0 z-10`}
-                  >
-                    <ul className='menu menu-vertical gap-6'>
-                      <li>Recursos</li>
-                      <li>
-                        <div>
-                          <Box className='' />
-                          <div>
-                            <b>Blog</b>
-                            <p>Consejos para tu negocio</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div>
-                          <Box className='' />
-                          <div>
-                            <b>Guías</b>
-                            <p>Información util para emprendedores</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div>
-                          <Box className='' />
-                          <div>
-                            <b>Casos de éxito</b>
-                            <p>Historias reales de nuestros clientes</p>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div>
-                          <Box className='' />
-                          <div>
-                            <b>Webinars</b>
-                            <p>Aprende con expertos en financiamiento</p>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </details>
-              </li>
-            </ul>
+    <header className=' border-b border-gray-500'>
+      <div className='px-6 py-4'>
+        <div className='flex items-center justify-between'>
+          <Link href='/' className='flex items-center gap-4'>
+            <h1 className='text-2xl font-bold '>💼 FinanciaPYME</h1>
+          </Link>
+          <div className='flex items-center gap-4'>
+            <ThemeSwitcher />
+            {user && user.user_metadata.role === 'client' && (
+              <Link
+                href='/new-request'
+                className='px-4 py-2 bg-blue-600  rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2'
+              >
+                <Plus className='w-4 h-4' />
+                Nueva Solicitud
+              </Link>
+            )}
+            {/* User Menu */}
+            <AuthButton user={user} />
           </div>
         </div>
-        <div className='navbar-end hidden md:flex'>
-          {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
-        </div>
-        <MenuHeaderMobile />
       </div>
     </header>
   )
