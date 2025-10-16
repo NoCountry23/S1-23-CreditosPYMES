@@ -1,5 +1,5 @@
-import DashboardClient from '@/components/DashboardClient'
-import DashboardOperator from '@/components/DashboardOperator'
+import DashboardClient from '@/components/dashboardClient/DashboardClient'
+import DashboardOperator from '@/components/dashboardOperator/DashboardOperator'
 import Landing from '@/components/Landing'
 import { createClient } from '@/lib/supabase/server'
 
