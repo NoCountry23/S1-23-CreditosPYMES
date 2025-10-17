@@ -7,7 +7,7 @@ export function AuthButton({ user }: { user: User | null }) {
   return user ? (
     <HeaderUserMenu user={user} />
   ) : (
-    <div className='flex gap-2'>
+    <div className='flex gap-2 flex-wrap justify-end'>
       <Button asChild variant={'outline'}>
         <Link href='/auth/login'>Iniciar sesión</Link>
       </Button>
