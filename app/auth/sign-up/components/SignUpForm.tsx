@@ -92,7 +92,7 @@ export default function SignUpForm() {
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit(onSubmit)}
-          className='flex flex-col  gap-4'
+          className='flex flex-col w-full  gap-4'
         >
           {currentStep === 1 && <FirstStep />}
           {currentStep === 2 && <SecondStep />}

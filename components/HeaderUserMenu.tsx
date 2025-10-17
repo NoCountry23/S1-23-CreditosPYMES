@@ -28,8 +28,8 @@ export default function HeaderUserMenu({ user }: { user: SupabaseUser }) {
 
       {/* User Dropdown */}
       {showUserMenu && (
-        <div className='absolute right-0 mt-2 w-fit  rounded-lg shadow-xl border bg-background border-gray-200 overflow-hidden'>
-          <div className='p-4  border-b border-gray-200'>
+        <div className='absolute right-0 mt-2 w-fit  rounded-lg shadow-xl border bg-background border-gray-500 overflow-hidden'>
+          <div className='p-4  border-b border-gray-500'>
             <p className='font-semibold '>{full_name || email}</p>
             <p className='text-xs text-gray-500 mt-1'>{email}</p>
           </div>
@@ -56,7 +56,7 @@ export default function HeaderUserMenu({ user }: { user: SupabaseUser }) {
               <span className='text-sm '>Centro de Ayuda</span>
             </a>
           </div>
-          <div className='border-t border-gray-200 py-2 px-4'>
+          <div className='border-t border-gray-500 py-2 px-4'>
             {/* <button className='flex items-center gap-3 px-4 py-2 hover:bg-gray-500/50 transition-colors w-full text-red-600'>
             </button> */}
             <LogoutButton />

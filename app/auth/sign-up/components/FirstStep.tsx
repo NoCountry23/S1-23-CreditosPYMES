@@ -34,7 +34,7 @@ export default function FirstStep() {
             minLength: { value: 3, message: 'Mínimo 3 caracteres' },
           })}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            userErrors?.fullName ? 'border-red-500' : 'border-gray-300'
+            userErrors?.fullName ? 'border-red-500' : 'border-gray-500'
           }`}
           placeholder='Juan Pérez'
         />
@@ -59,7 +59,7 @@ export default function FirstStep() {
             },
           })}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            userErrors?.email ? 'border-red-500' : 'border-gray-300'
+            userErrors?.email ? 'border-red-500' : 'border-gray-500'
           }`}
           placeholder='contacto@miempresa.com'
         />
@@ -86,7 +86,7 @@ export default function FirstStep() {
               },
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              userErrors?.password ? 'border-red-500' : 'border-gray-300'
+              userErrors?.password ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='••••••••'
           />
@@ -109,7 +109,7 @@ export default function FirstStep() {
                 value === password || 'Las contraseñas no coinciden',
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              userErrors?.confirmPassword ? 'border-red-500' : 'border-gray-300'
+              userErrors?.confirmPassword ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='••••••••'
           />
@@ -136,7 +136,7 @@ export default function FirstStep() {
             },
           })}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            userErrors?.phone ? 'border-red-500' : 'border-gray-300'
+            userErrors?.phone ? 'border-red-500' : 'border-gray-500'
           }`}
           placeholder='+54 11 1234-5678'
         />
