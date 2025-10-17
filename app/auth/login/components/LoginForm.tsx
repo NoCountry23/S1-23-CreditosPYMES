@@ -50,7 +50,7 @@ export default function LoginForm() {
               },
             })}
             className={`w-full pl-11 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
+              errors.email ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='tu@empresa.com'
           />
@@ -78,7 +78,7 @@ export default function LoginForm() {
               },
             })}
             className={`w-full pl-11 pr-11 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              errors.password ? 'border-red-500' : 'border-gray-300'
+              errors.password ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='••••••••'
           />
