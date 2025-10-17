@@ -1,6 +1,6 @@
 import DashboardClient from '@/components/dashboardClient/DashboardClient'
 import DashboardOperator from '@/components/dashboardOperator/DashboardOperator'
-import Landing from '@/components/Landing'
+import Landing from '@/components/landing/Landing'
 import { createClient } from '@/lib/supabase/server'
 
 export default async function Home() {

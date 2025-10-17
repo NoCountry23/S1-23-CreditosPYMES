@@ -11,7 +11,11 @@ export function AuthButton({ user }: { user: User | null }) {
       <Button asChild variant={'outline'}>
         <Link href='/auth/login'>Iniciar sesión</Link>
       </Button>
-      <Button asChild variant={'default'}>
+      <Button
+        asChild
+        variant={'default'}
+        className='bg-blue-700 hover:bg-blue-900 text-white'
+      >
         <Link href='/auth/sign-up'>Registrarme</Link>
       </Button>
     </div>
