@@ -1,40 +1,18 @@
-'use client'
 import Link from 'next/link'
 import { Button } from './ui/button'
-import { createClient } from '@/lib/supabase/client'
-import { LogoutButton } from './logout-button'
-import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
+import HeaderUserMenu from './HeaderUserMenu'
 
-export function AuthButton() {
-  const supabase = createClient()
-  const [user, setUser] = useState<User | null>(null)
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
-      }
-    )
-
-    return () => {
-      listener.subscription.unsubscribe()
-    }
-  }, [supabase])
+export function AuthButton({ user }: { user: User | null }) {
   return user ? (
-    <div className='flex items-center gap-4'>
-      Hey, {user.email}!
-      <LogoutButton />
-    </div>
+    <HeaderUserMenu user={user} />
   ) : (
-    <div className='flex gap-2'>
-      <Button asChild size='sm' variant={'outline'}>
-        <Link href='/auth/login'>Sign in</Link>
+    <div className='flex gap-2 flex-wrap justify-end'>
+      <Button asChild variant={'outline'}>
+        <Link href='/auth/login'>Iniciar sesión</Link>
       </Button>
-      <Button asChild size='sm' variant={'default'}>
-        <Link href='/auth/sign-up'>Sign up</Link>
+      <Button asChild variant={'default'}>
+        <Link href='/auth/sign-up'>Registrarme</Link>
       </Button>
     </div>
   )
