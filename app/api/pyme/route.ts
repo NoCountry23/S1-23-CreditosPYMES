@@ -1,33 +1,52 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { PymeSchema } from '@/schema/PymeSchema';
+import { z } from 'zod';
 
 export async function POST(request: NextRequest) {
     const supabase = await createClient();
-    const requestBody = await request.json();
-
-    if (Object.keys(requestBody).length === 0) {
-        return NextResponse.json({ error: 'El cuerpo del request está vacío' }, { status: 400 });
+    
+    let requestBody;
+    try {
+        // Intenta parsear el JSON. Falla si el cuerpo no es JSON válido.
+        requestBody = await request.json();
+    } catch (e) {
+        console.error('Internal Server Error:', e);
+        return NextResponse.json({ error: 'Formato de solicitud JSON inválido.' }, { status: 400 });
     }
+
+
+    const validationResult = PymeSchema.safeParse(requestBody);
+
+
+    if (!validationResult.success) {
+        // Devolver 400 Bad Request con detalles de todos los errores de validación
+        return NextResponse.json(
+            { 
+                error: 'Datos de la pyme inválidos.', 
+                details: z.treeifyError(validationResult.error) // Usando el método recomendado
+            }, 
+            { status: 400 }
+        );
+    }
+    
+    // Si la validación es exitosa, obtenemos los datos limpios y tipados
+    const dataValidated = validationResult.data; 
 
     try {
 
         const { data, error } = await supabase.from('pyme')
-            .insert(requestBody)
+            .insert(dataValidated) 
             .select() 
             .single(); 
 
-
-
         if (error) {
-
             console.error('Supabase Error:', error);
+            // Error de base de datos (ej: clave duplicada, restricción de tabla)
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
-        if (!data) {
-            return NextResponse.json({ error: 'No se pudo crear la pyme' }, { status: 500 });
-        }
-
+       
         return NextResponse.json(data, { status: 201 });
 
     } catch (error) {

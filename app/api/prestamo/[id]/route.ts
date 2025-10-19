@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server';
-
+import { IdSchema } from '@/schema/IdSchema';
 export async function GET({ params }: { params: { id: string } }) {
     const supabase = await createClient();
     const { id } = await params;
@@ -8,6 +8,10 @@ export async function GET({ params }: { params: { id: string } }) {
     if (!id) {
         return NextResponse.json({ error: 'ID de prestamo es requerido' }, { status: 400 });
     }
+    if (!IdSchema.safeParse(id).success) {
+        return NextResponse.json({ error: 'ID de prestamo inválido' }, { status: 400 });
+    }
+
     try {
         const { data, error } = await supabase.from('prestamos').select('*').eq('id', id).single();
         if (error) {
@@ -23,6 +27,10 @@ export async function GET({ params }: { params: { id: string } }) {
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const supabase = await createClient();
     const { id } = await params;
+
+    if (!IdSchema.safeParse(id).success) {
+        return NextResponse.json({ error: 'ID de prestamo inválido' }, { status: 400 });
+    }
     if (!id) {
         return NextResponse.json({ error: 'ID de prestamo es requerido' }, { status: 400 });
     }
@@ -46,6 +54,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 export async function DELETE({ params }: { params: { id: string } }) {
     const supabase = await createClient();
     const { id } = await params;
+
+    if (!IdSchema.safeParse(id).success) {
+        return NextResponse.json({ error: 'ID de prestamo inválido' }, { status: 400 });
+    }
 
     if (!id) {
         return NextResponse.json({ error: 'ID del prestamo es requerido' }, { status: 400 });

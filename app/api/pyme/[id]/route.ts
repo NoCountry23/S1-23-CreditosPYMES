@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
-
+import {IdSchema} from '@/schema/IdSchema';
 
 export async function GET({ params }: { params: { id: string } }) {
     const supabase = await createClient();
@@ -8,8 +8,13 @@ export async function GET({ params }: { params: { id: string } }) {
 
     const { id } = await params;
 
+    
     if (!id) {
         return NextResponse.json({ error: 'ID de pyme es requerido' }, { status: 400 });
+    }
+
+    if (!IdSchema.safeParse(id).success) {
+        return NextResponse.json({ error: 'ID de pyme inválido' }, { status: 400 });
     }
     try {
         const { data, error } = await supabase.from('pyme').select('*').eq('id', id).single();
@@ -31,6 +36,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const { id } = await params;
     if (!id) {
         return NextResponse.json({ error: 'ID de pyme es requerido' }, { status: 400 });
+    }
+
+    if (!IdSchema.safeParse(id).success) {
+        return NextResponse.json({ error: 'ID de pyme inválido' }, { status: 400 });
     }
     const updateData = await request.json();
     try {
