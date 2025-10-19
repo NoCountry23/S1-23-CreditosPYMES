@@ -13,10 +13,5 @@ export default async function Layout({
   if (!(role === 'client') || data.user === null) {
     return redirect('/')
   }
-  return (
-    <>
-      <p>Layout para autenticados como client</p>
-      {children}
-    </>
-  )
+  return <>{children}</>
 }

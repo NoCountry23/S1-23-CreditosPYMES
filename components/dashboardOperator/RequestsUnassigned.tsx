@@ -71,7 +71,7 @@ export default function RequestsUnassigned() {
     )
   }
   return (
-    <div className='space-y-4'>
+    <div className='space-y-4 '>
       {/* Search and Filter */}
       <div className='flex gap-4 mb-6'>
         <div className='flex-1 relative'>
@@ -79,13 +79,13 @@ export default function RequestsUnassigned() {
           <input
             type='text'
             placeholder='Buscar por empresa, CUIT o ID...'
-            className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+            className='w-full pl-10 pr-4 py-2 border border-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <select
-          className='px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          className='px-4 py-2 border border-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
@@ -100,7 +100,7 @@ export default function RequestsUnassigned() {
       {unassignedRequests.map((request) => (
         <div
           key={request.id}
-          className=' rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow'
+          className=' rounded-lg border border-gray-500 p-6 hover:shadow-lg transition-shadow'
         >
           <div className='flex items-start justify-between'>
             <div className='flex-1'>

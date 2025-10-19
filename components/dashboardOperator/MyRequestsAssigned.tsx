@@ -67,34 +67,6 @@ export default function MyRequestsAssigned() {
   const handleViewDetails = (request: { id: string }) => {
     setSelectedRequest(request)
   }
-  // const getStatusBadge = (status) => {
-  //   const config = {
-  //     in_review: {
-  //       text: 'En Revisión',
-  //       class: 'bg-blue-100 text-blue-800',
-  //       icon: <Clock className='w-3 h-3' />,
-  //     },
-  //     approved: {
-  //       text: 'Aprobado',
-  //       class: 'bg-green-100 text-green-800',
-  //       icon: <CheckCircle className='w-3 h-3' />,
-  //     },
-  //     rejected: {
-  //       text: 'Rechazado',
-  //       class: 'bg-red-100 text-red-800',
-  //       icon: <XCircle className='w-3 h-3' />,
-  //     },
-  //   }
-  //   const c = config[status]
-  //   return (
-  //     <span
-  //       className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${c.class}`}
-  //     >
-  //       {c.icon}
-  //       {c.text}
-  //     </span>
-  //   )
-  // }
   return (
     <div className='space-y-4'>
       {/* Search */}
@@ -104,7 +76,7 @@ export default function MyRequestsAssigned() {
           <input
             type='text'
             placeholder='Buscar en mis solicitudes...'
-            className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+            className='w-full pl-10 pr-4 py-2 border border-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           />
         </div>
       </div>
@@ -113,7 +85,7 @@ export default function MyRequestsAssigned() {
       {myRequests.map((request) => (
         <div
           key={request.id}
-          className=' rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow'
+          className=' rounded-lg border border-gray-500 p-6 hover:shadow-lg transition-shadow'
         >
           <div className='flex items-start justify-between'>
             <div className='flex-1'>
