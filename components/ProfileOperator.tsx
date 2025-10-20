@@ -104,7 +104,7 @@ const OperatorProfile = () => {
   return (
     <div className='min-h-screen '>
       {/* Header */}
-      <div className=' border-b border-gray-500/50 shadow-lg'>
+      <div className=' border-b border-gray-500/50  shadow-lg'>
         <div className='max-w-7xl mx-auto px-6 py-4'>
           <div className='flex items-center justify-between'>
             <h1 className='text-2xl font-bold '>Mi Perfil</h1>
@@ -119,7 +119,7 @@ const OperatorProfile = () => {
         <div className='grid lg:grid-cols-3 gap-8'>
           {/* Left Column - Profile Card */}
           <div className='lg:col-span-1'>
-            <div className=' rounded-xl shadow-sm border border-gray-500/50 dark:bg-base-100 overflow-hidden'>
+            <div className=' rounded-xl shadow-sm border border-gray-500/50  dark:bg-base-100 overflow-hidden'>
               {/* Profile Header */}
               <div className='bg-gradient-to-br from-slate-800 to-slate-900 p-8 text-white text-center'>
                 <div className='w-24 h-24  rounded-full mx-auto mb-4 flex items-center justify-center'>
@@ -139,7 +139,7 @@ const OperatorProfile = () => {
               </div>
 
               {/* Quick Stats */}
-              <div className='p-6 border-b border-gray-500/50 dark:bg-base-100'>
+              <div className='p-6 border-b border-gray-500/50  dark:bg-base-100'>
                 <h3 className='font-semibold  mb-4'>Estadísticas</h3>
                 <div className='grid grid-cols-2 gap-4'>
                   <div className='text-center'>
@@ -187,7 +187,7 @@ const OperatorProfile = () => {
                       ></div>
                     </div>
                   </div>
-                  <div className='flex items-center justify-between py-3 border-t border-gray-500/50 dark:bg-base-100'>
+                  <div className='flex items-center justify-between py-3 border-t border-gray-500/50  dark:bg-base-100'>
                     <span className='text-sm '>Tiempo Promedio</span>
                     <span className='text-sm font-bold '>
                       {stats.avgProcessingTime}
@@ -201,8 +201,8 @@ const OperatorProfile = () => {
           {/* Right Column - Details & Activity */}
           <div className='lg:col-span-2 space-y-6'>
             {/* Personal Information */}
-            <div className=' rounded-xl shadow-sm border border-gray-500/50 dark:bg-base-100'>
-              <div className='p-6 border-b rounded-xl border-gray-500/50 dark:bg-base-100 flex items-center justify-between'>
+            <div className=' rounded-xl shadow-sm border border-gray-500/50  dark:bg-base-100'>
+              <div className='p-6 border-b rounded-xl border-gray-500/50  dark:bg-base-100 flex items-center justify-between'>
                 <h3 className='text-lg font-semibold '>Información Personal</h3>
                 {!isEditing ? (
                   <button
@@ -356,8 +356,8 @@ const OperatorProfile = () => {
             </div>
 
             {/* Recent Activity */}
-            <div className=' rounded-xl shadow-sm border border-gray-500/50 dark:bg-base-100'>
-              <div className='p-6 border-b rounded-xl border-gray-500/50 dark:bg-base-100'>
+            <div className=' rounded-xl shadow-sm border border-gray-500/50  dark:bg-base-100'>
+              <div className='p-6 border-b rounded-xl border-gray-500/50  dark:bg-base-100'>
                 <h3 className='text-lg font-semibold '>Actividad Reciente</h3>
               </div>
               <div className='divide-y divide-gray-200'>
@@ -389,8 +389,8 @@ const OperatorProfile = () => {
             </div>
 
             {/* Achievements */}
-            {/* <div className=' rounded-xl shadow-sm border border-gray-500/50 dark:bg-base-100'>
-              <div className='p-6 border-b border-gray-500/50 dark:bg-base-100'>
+            {/* <div className=' rounded-xl shadow-sm border border-gray-500/50  dark:bg-base-100'>
+              <div className='p-6 border-b border-gray-500/50  dark:bg-base-100'>
                 <h3 className='text-lg font-semibold '>Logros</h3>
               </div>
               <div className='p-6'>

@@ -179,7 +179,7 @@ export default function ThirdStep() {
         <textarea
           {...register('legalInfo.activityDescription')}
           rows={4}
-          className='w-full px-4 py-3 border border-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          className='w-full px-4 py-3 border border-gray-500/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           placeholder='Describe brevemente la actividad principal de tu empresa...'
         ></textarea>
       </div>

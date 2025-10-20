@@ -16,7 +16,7 @@ export default function Loans({
 }) {
   return (
     <div className='space-y-6'>
-      <div className=' rounded-xl shadow-sm p-6 border border-gray-500'>
+      <div className=' rounded-xl shadow-sm p-6 dark bg-slate-500/10 dark:bg-base-100'>
         <h2 className='text-xl font-bold  mb-6'>Préstamo Activo</h2>
 
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-6'>

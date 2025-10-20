@@ -24,7 +24,7 @@ export default function Header() {
   })
 
   return (
-    <header className=' border-b border-slate-500'>
+    <header className=' border-b border-slate-500/50 shadow-md'>
       <div className='px-6 py-4'>
         <div className='flex items-center justify-between h-full'>
           <Link href='/' className='flex items-center gap-4'>

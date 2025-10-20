@@ -8,7 +8,7 @@ export default function NavigationTabs({
   setActiveTab: (tab: string) => void
 }) {
   return (
-    <div className=' border-b border-gray-500'>
+    <div className=' border-b border-gray-500/50  shadow-md'>
       <div className='px-6'>
         <nav className='flex gap-8'>
           <button

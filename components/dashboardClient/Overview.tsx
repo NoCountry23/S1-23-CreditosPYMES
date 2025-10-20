@@ -83,7 +83,7 @@ export default function Overview({
     <div className='space-y-6'>
       {/* KPI Cards */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-        <div className=' rounded-xl shadow-sm p-6 border border-gray-500'>
+        <div className=' rounded-xl shadow-sm p-6 bg-slate-500/10 dark:bg-base-100'>
           <div className='flex items-center justify-between'>
             <div>
               <p className='text-sm font-medium '>Préstamo Activo</p>
@@ -98,7 +98,7 @@ export default function Overview({
           </div>
         </div>
 
-        <div className=' rounded-xl shadow-sm p-6 border border-gray-500'>
+        <div className=' rounded-xl shadow-sm p-6 bg-slate-500/10 dark:bg-base-100'>
           <div className='flex items-center justify-between'>
             <div>
               <p className='text-sm font-medium '>Saldo Pendiente</p>
@@ -115,7 +115,7 @@ export default function Overview({
           </div>
         </div>
 
-        <div className=' rounded-xl shadow-sm p-6 border border-gray-500'>
+        <div className=' rounded-xl shadow-sm p-6 bg-slate-500/10 dark:bg-base-100'>
           <div className='flex items-center justify-between'>
             <div>
               <p className='text-sm font-medium '>Próximo Pago</p>
@@ -132,7 +132,7 @@ export default function Overview({
           </div>
         </div>
 
-        <div className=' rounded-xl shadow-sm p-6 border border-gray-500'>
+        <div className=' rounded-xl shadow-sm p-6 bg-slate-500/10 dark:bg-base-100'>
           <div className='flex items-center justify-between'>
             <div>
               <p className='text-sm font-medium '>Solicitudes</p>
@@ -149,8 +149,8 @@ export default function Overview({
       </div>
 
       {/* Recent Applications */}
-      <div className=' rounded-xl shadow-sm border border-gray-500'>
-        <div className='p-6 border-b border-gray-500'>
+      <div className=' rounded-xl shadow-sm bg-slate-500/10 dark:bg-base-100'>
+        <div className='p-6 border-b border-gray-500/50   bg-slate-500/10 dark:bg-base-100'>
           <h3 className='text-lg font-semibold '>Solicitudes Recientes</h3>
         </div>
         <div className='overflow-x-auto'>
