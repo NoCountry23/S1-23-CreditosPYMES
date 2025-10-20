@@ -69,65 +69,56 @@ export async function POST(request: NextRequest) {
 
     const result = await response.json();
 
-    // 🔍 DEBUGGING: Imprime toda la respuesta para ver qué te devuelve
+    // DEBUGGING: Imprime toda la respuesta para ver qué te devuelve
     console.log("=== RESPUESTA COMPLETA DE DOCUSIGN ===");
     console.log("Status:", response.status);
     console.log("Headers:", Object.fromEntries(response.headers.entries()));
     console.log("Body completo:", JSON.stringify(result, null, 2));
 
-    // ✅ VALIDACIÓN: Verifica que la respuesta tenga la estructura esperada
+    // VALIDACIÓN: Verifica que la respuesta tenga la estructura esperada
     if (!result || typeof result !== 'object') {
-      console.error("❌ Respuesta inválida: no es un objeto");
+      console.error("Respuesta inválida: no es un objeto");
       return NextResponse.json(
         { error: "Respuesta inválida del servicio de firma" },
         { status: 500 }
       );
     }
 
-    // ✅ VALIDACIÓN: Verifica que tenga los campos esperados
+    // VALIDACIÓN: Verifica que tenga los campos esperados
     if (!result.data && !result.success && !result.envelopeId) {
-      console.warn("⚠️ La respuesta no tiene los campos esperados");
+      console.warn("La respuesta no tiene los campos esperados");
       console.log("Campos disponibles:", Object.keys(result));
     }
 
-    // 📝 LOGGING: Guarda información importante para debugging
+    // LOGGING: Guarda información importante para debugging
     console.log("=== INFORMACIÓN IMPORTANTE ===");
     console.log("Envelope ID:", result.envelopeId || result.data?.envelopeId || "No disponible");
     console.log("Status:", result.status || result.data?.status || "No disponible");
     console.log("Success:", result.success || result.data?.success || "No disponible");
 
-    // 🎯 RESPUESTA: Retorna la información al cliente
+    // RESPUESTA: Retorna la información al cliente
     return NextResponse.json({
       success: true,
       message: "Documento enviado para firma exitosamente",
       data: {
         envelopeId: result.envelopeId || result.data?.envelopeId,
         status: result.status || result.data?.status,
-        originalResponse: result // Para debugging en desarrollo
+        originalResponse: result
       }
     });
 
   } catch (error) {
-    // 🚨 MANEJO DE ERRORES: Captura y registra todos los errores
+    // MANEJO DE ERRORES: Captura y registra todos los errores
     console.error("=== ERROR EN DOCUSIGN API ===");
     console.error("Tipo de error:", error instanceof Error ? error.constructor.name : typeof error);
     console.error("Mensaje:", error instanceof Error ? error.message : String(error));
     console.error("Stack trace:", error instanceof Error ? error.stack : "No disponible");
 
-    // 📊 INFORMACIÓN ADICIONAL PARA DEBUGGING
+    // INFORMACIÓN ADICIONAL PARA DEBUGGING
     if (error instanceof Error) {
       console.error("=== DETALLES DEL ERROR ===");
       console.error("Name:", error.name);
       console.error("Message:", error.message);
-      
-      // Si es un error de fetch, muestra más detalles
-      if (error.message.includes('fetch')) {
-        console.error("Posibles causas:");
-        console.error("- URL incorrecta");
-        console.error("- Problemas de red");
-        console.error("- CORS issues");
-        console.error("- Timeout");
-      }
     }
 
     return NextResponse.json(
