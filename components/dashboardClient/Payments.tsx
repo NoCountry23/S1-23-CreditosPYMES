@@ -20,7 +20,7 @@ export default function Payments() {
           {paymentHistory.map((payment, index) => (
             <div
               key={index}
-              className='flex items-center justify-between p-4  rounded-lg hover:bg-gray-500/50 transition-colors'
+              className='flex items-center justify-between p-4  rounded-lg hover:bg-slate-500/20 transition-colors'
             >
               <div className='flex items-center gap-4'>
                 <div

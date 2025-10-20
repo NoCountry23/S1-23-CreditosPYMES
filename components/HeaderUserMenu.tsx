@@ -14,7 +14,7 @@ export default function HeaderUserMenu({ user }: { user: SupabaseUser }) {
     <div className='relative z-20'>
       <button
         onClick={() => setShowUserMenu(!showUserMenu)}
-        className='flex items-center gap-3 p-2 hover:bg-gray-500/50 rounded-lg transition-colors'
+        className='flex items-center gap-3 p-2 hover:bg-slate-500/20 rounded-lg transition-colors'
       >
         <div className='text-right hidden md:block'>
           <p className='text-sm font-medium '>{full_name || email}</p>
@@ -35,29 +35,29 @@ export default function HeaderUserMenu({ user }: { user: SupabaseUser }) {
           </div>
           <div className='py-2'>
             <a
-              href='#'
-              className='flex items-center gap-3 px-4 py-2 hover:bg-gray-500/50 transition-colors'
+              href='/profile'
+              className='flex items-center gap-3 px-4 py-2 hover:bg-slate-500/20 transition-colors'
             >
               <User className='w-4 h-4 ' />
               <span className='text-sm '>Mi Perfil</span>
             </a>
             <a
               href='#'
-              className='flex items-center gap-3 px-4 py-2 hover:bg-gray-500/50 transition-colors'
+              className='flex items-center gap-3 px-4 py-2 hover:bg-slate-500/20 transition-colors'
             >
               <Settings className='w-4 h-4 ' />
               <span className='text-sm '>Configuración</span>
             </a>
             <a
               href='#'
-              className='flex items-center gap-3 px-4 py-2 hover:bg-gray-500/50 transition-colors'
+              className='flex items-center gap-3 px-4 py-2 hover:bg-slate-500/20 transition-colors'
             >
               <HelpCircle className='w-4 h-4 ' />
               <span className='text-sm '>Centro de Ayuda</span>
             </a>
           </div>
           <div className='border-t border-gray-500 py-2 px-4'>
-            {/* <button className='flex items-center gap-3 px-4 py-2 hover:bg-gray-500/50 transition-colors w-full text-red-600'>
+            {/* <button className='flex items-center gap-3 px-4 py-2 hover:bg-slate-500/20 transition-colors w-full text-red-600'>
             </button> */}
             <LogoutButton />
           </div>
