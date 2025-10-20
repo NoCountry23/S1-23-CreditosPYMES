@@ -49,7 +49,7 @@ export default function SecondStep() {
         <input
           type='text'
           {...register('company.tradeName')}
-          className='w-full px-4 py-3 border border-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          className='w-full px-4 py-3 border border-gray-500/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           placeholder='Mi Empresa'
         />
       </div>
@@ -145,7 +145,7 @@ export default function SecondStep() {
               message: 'URL inválida (incluye http:// o https://)',
             },
           })}
-          className='w-full px-4 py-3 border border-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          className='w-full px-4 py-3 border border-gray-500/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           placeholder='https://www.miempresa.com'
         />
         {companyErrors?.website && (

@@ -52,7 +52,7 @@ export default async function OperatorDashboard() {
         </div>
       ) : (
         <div className='overflow-x-auto'>
-          <table className='w-full border border-gray-500 rounded-lg overflow-hidden'>
+          <table className='w-full border border-gray-500/50 rounded-lg overflow-hidden'>
             <thead className='bg-gray-200 text-gray-700'>
               <tr>
                 <th className='border p-2 text-left'>ID</th>

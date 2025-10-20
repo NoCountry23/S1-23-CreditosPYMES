@@ -8,7 +8,7 @@ export default function NavigationTabs({
   setActiveTab: (tab: string) => void
 }) {
   return (
-    <div className=' border-b border-gray-500'>
+    <div className=' border-b border-gray-500/50  shadow-md'>
       <div className='px-6'>
         <nav className='flex gap-8'>
           <button
@@ -16,7 +16,7 @@ export default function NavigationTabs({
             className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'overview'
                 ? 'border-blue-600 text-blue-600'
-                : 'border-transparent  hover:text-gray-700'
+                : 'border-transparent  hover:text-gray-500'
             }`}
           >
             Vista General
@@ -26,7 +26,7 @@ export default function NavigationTabs({
             className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'loans'
                 ? 'border-blue-600 text-blue-600'
-                : 'border-transparent  hover:text-gray-700'
+                : 'border-transparent  hover:text-gray-500'
             }`}
           >
             Mis Préstamos
@@ -36,7 +36,7 @@ export default function NavigationTabs({
             className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'payments'
                 ? 'border-blue-600 text-blue-600'
-                : 'border-transparent  hover:text-gray-700'
+                : 'border-transparent  hover:text-gray-500'
             }`}
           >
             Pagos
@@ -46,7 +46,7 @@ export default function NavigationTabs({
             className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'documents'
                 ? 'border-blue-600 text-blue-600'
-                : 'border-transparent  hover:text-gray-700'
+                : 'border-transparent  hover:text-gray-500'
             }`}
           >
             Documentos

@@ -168,7 +168,9 @@ export default function DetailedView({
           {/* Content */}
           <div className='p-6 space-y-6'>
             {/* Risk Analysis Alert */}
-            <div className={`p-4 rounded-lg border border-gray-500`}>
+            <div
+              className={`p-4 rounded-lg border border-gray-500/50 dark:bg-base-100`}
+            >
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-3'>
                   <div>
@@ -188,7 +190,7 @@ export default function DetailedView({
               {/* Left Column */}
               <div className='lg:col-span-2 space-y-6'>
                 {/* Company Info */}
-                <div className=' border border-gray-500 rounded-lg p-6'>
+                <div className=' border border-gray-500/50 dark:bg-base-100 rounded-lg p-6'>
                   <h3 className='text-lg font-semibold mb-4 flex items-center gap-2'>
                     <Building2 className='w-5 h-5 text-blue-600' />
                     Información de la Empresa
@@ -236,7 +238,7 @@ export default function DetailedView({
                 </div>
 
                 {/* Financial Data */}
-                <div className=' border border-gray-500 rounded-lg p-6'>
+                <div className=' border border-gray-500/50 dark:bg-base-100 rounded-lg p-6'>
                   <h3 className='text-lg font-semibold mb-4 flex items-center gap-2'>
                     <TrendingUp className='w-5 h-5 text-green-600' />
                     Datos Financieros
@@ -298,7 +300,7 @@ export default function DetailedView({
                 </div>
 
                 {/* Loan Details */}
-                <div className=' border border-gray-500 rounded-lg p-6'>
+                <div className=' border border-gray-500/50 dark:bg-base-100 rounded-lg p-6'>
                   <h3 className='text-lg font-semibold mb-4 flex items-center gap-2'>
                     <DollarSign className='w-5 h-5 text-blue-600' />
                     Detalles del Préstamo
@@ -352,7 +354,7 @@ export default function DetailedView({
                 </div>
 
                 {/* Documents */}
-                <div className=' border border-gray-500 rounded-lg p-6'>
+                <div className=' border border-gray-500/50 dark:bg-base-100 rounded-lg p-6'>
                   <h3 className='text-lg font-semibold mb-4 flex items-center gap-2'>
                     <FileText className='w-5 h-5 text-blue-600' />
                     Documentación
@@ -389,7 +391,7 @@ export default function DetailedView({
               {/* Right Column */}
               <div className='space-y-6'>
                 {/* Actions */}
-                <div className=' border border-gray-500 rounded-lg p-6'>
+                <div className=' border border-gray-500/50 dark:bg-base-100 rounded-lg p-6'>
                   <h3 className='text-lg font-semibold mb-4'>Acciones</h3>
                   <div className='space-y-3'>
                     <button
@@ -414,7 +416,7 @@ export default function DetailedView({
                 </div>
 
                 {/* Risk Metrics */}
-                <div className=' border border-gray-500 rounded-lg p-6'>
+                <div className=' border border-gray-500/50 dark:bg-base-100 rounded-lg p-6'>
                   <h3 className='text-lg font-semibold mb-4'>
                     Análisis de Riesgo
                   </h3>
@@ -460,7 +462,7 @@ export default function DetailedView({
                 </div>
 
                 {/* Timeline */}
-                <div className=' border border-gray-500 rounded-lg p-6'>
+                <div className=' border border-gray-500/50 dark:bg-base-100 rounded-lg p-6'>
                   <h3 className='text-lg font-semibold mb-4'>
                     Línea de Tiempo
                   </h3>

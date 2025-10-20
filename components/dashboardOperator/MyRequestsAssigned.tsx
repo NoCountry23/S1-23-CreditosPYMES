@@ -76,7 +76,7 @@ export default function MyRequestsAssigned() {
           <input
             type='text'
             placeholder='Buscar en mis solicitudes...'
-            className='w-full pl-10 pr-4 py-2 border border-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+            className='w-full pl-10 pr-4 py-2 border border-gray-500/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           />
         </div>
       </div>
@@ -85,7 +85,7 @@ export default function MyRequestsAssigned() {
       {myRequests.map((request) => (
         <div
           key={request.id}
-          className=' rounded-lg border border-gray-500 p-6 hover:shadow-lg transition-shadow'
+          className=' rounded-lg border border-gray-500/50  dark:bg-base-100 p-6 hover:shadow-lg transition-shadow'
         >
           <div className='flex items-start justify-between'>
             <div className='flex-1'>
