@@ -3,7 +3,7 @@ import { Button } from './ui/button'
 import { User } from '@supabase/supabase-js'
 import HeaderUserMenu from './HeaderUserMenu'
 
-export function AuthButton({ user }: { user: User | null }) {
+export function AuthButton({ user }: { user: User | null | undefined }) {
   return user ? (
     <HeaderUserMenu user={user} />
   ) : (
