@@ -35,7 +35,7 @@ export default function Header() {
           ) : (
             <div className='flex items-center gap-4'>
               <ThemeSwitcher />
-              {user && user.user_metadata.role === 'client' && (
+              {user && user.user_metadata.role === 'representante' && (
                 <Link
                   href='/new-request'
                   className='px-4 py-2 bg-blue-600  rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2'

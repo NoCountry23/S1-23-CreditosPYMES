@@ -105,7 +105,7 @@ const OperatorProfile = () => {
     <div className='min-h-screen '>
       {/* Header */}
       <div className=' border-b border-gray-500/50  shadow-lg'>
-        <div className='max-w-7xl mx-auto px-6 py-4'>
+        <div className=' px-6 py-4'>
           <div className='flex items-center justify-between'>
             <h1 className='text-2xl font-bold '>Mi Perfil</h1>
             <Link href='/' className=' hover:text-gray-500 text-sm'>

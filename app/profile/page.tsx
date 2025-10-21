@@ -11,7 +11,7 @@ export default async function page() {
   if (user?.user_metadata.role === 'operator') {
     return <ProfileOperator />
   }
-  if (user?.user_metadata.role === 'client') {
+  if (user?.user_metadata.role === 'representante') {
     return <ProfileClient />
   }
 }
