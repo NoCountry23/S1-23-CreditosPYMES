@@ -10,7 +10,7 @@ export default async function Layout({
   const supabase = await createClient()
   const { data } = await supabase.auth.getUser()
   const role = data?.user?.user_metadata?.role
-  if (!(role === 'client') || data.user === null) {
+  if (!(role === 'representante') || data.user === null) {
     return redirect('/')
   }
   return <>{children}</>
