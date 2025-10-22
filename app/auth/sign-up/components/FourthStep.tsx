@@ -22,7 +22,7 @@ export default function FourthStep({
       </p>
 
       {/* DNI */}
-      <div className='border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-500 transition-all'>
+      <div className='border-2 border-dashed border-gray-500/50 rounded-lg p-6 hover:border-blue-500 transition-all'>
         <div className='flex items-start gap-4'>
           <div className='w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0'>
             <FileText className='w-6 h-6 text-blue-600' />
@@ -52,7 +52,7 @@ export default function FourthStep({
       </div>
 
       {/* Constancia AFIP */}
-      <div className='border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-500 transition-all'>
+      <div className='border-2 border-dashed border-gray-500/50 rounded-lg p-6 hover:border-blue-500 transition-all'>
         <div className='flex items-start gap-4'>
           <div className='w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0'>
             <FileText className='w-6 h-6 text-green-600' />
@@ -81,7 +81,7 @@ export default function FourthStep({
       </div>
 
       {/* Estados Contables */}
-      <div className='border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-500 transition-all'>
+      <div className='border-2 border-dashed border-gray-500/50 rounded-lg p-6 hover:border-blue-500 transition-all'>
         <div className='flex items-start gap-4'>
           <div className='w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0'>
             <FileText className='w-6 h-6 text-purple-600' />
@@ -109,7 +109,7 @@ export default function FourthStep({
       </div>
 
       {/* Resúmenes Bancarios */}
-      <div className='border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-500 transition-all'>
+      <div className='border-2 border-dashed border-gray-500/50 rounded-lg p-6 hover:border-blue-500 transition-all'>
         <div className='flex items-start gap-4'>
           <div className='w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0'>
             <FileText className='w-6 h-6 text-orange-600' />
@@ -139,7 +139,7 @@ export default function FourthStep({
       </div>
 
       {/* Estatuto/Contrato Social (Optional) */}
-      <div className='border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-blue-500 transition-all '>
+      <div className='border-2 border-dashed border-gray-500/50 rounded-lg p-6 hover:border-blue-500 transition-all '>
         <div className='flex items-start gap-4'>
           <div className='w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0'>
             <FileText className='w-6 h-6 text-gray-600' />
@@ -178,7 +178,7 @@ export default function FourthStep({
             {...register('acceptTerms', {
               required: 'Debes aceptar los términos y condiciones',
             })}
-            className='mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+            className='mt-1 rounded border-gray-500/50 text-blue-600 focus:ring-blue-500'
           />
           <span className='text-sm '>
             Acepto los{' '}

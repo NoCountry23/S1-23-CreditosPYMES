@@ -24,31 +24,46 @@ export default function FirstStep() {
       <h2 className='text-2xl font-bold  mb-6'>Datos de Acceso</h2>
 
       <div>
-        <label className='block text-sm font-medium  mb-2'>
-          Nombre Completo del Representante Legal *
-        </label>
+        <label className='block text-sm font-medium  mb-2'>Nombre *</label>
         <input
           type='text'
-          {...register('user.fullName', {
+          {...register('user.firstName', {
             required: 'El nombre es requerido',
             minLength: { value: 3, message: 'Mínimo 3 caracteres' },
           })}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            userErrors?.fullName ? 'border-red-500' : 'border-gray-300'
+            userErrors?.firstName ? 'border-red-500' : 'border-gray-500'
           }`}
-          placeholder='Juan Pérez'
+          placeholder='Juan'
         />
-        {userErrors?.fullName && (
+        {userErrors?.firstName && (
           <p className='mt-1 text-sm text-red-600'>
-            {userErrors?.fullName.message}
+            {userErrors?.firstName.message}
+          </p>
+        )}
+      </div>
+      <div>
+        <label className='block text-sm font-medium  mb-2'>Apellido *</label>
+        <input
+          type='text'
+          {...register('user.lastName', {
+            required: 'El nombre es requerido',
+            minLength: { value: 3, message: 'Mínimo 3 caracteres' },
+          })}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            userErrors?.lastName ? 'border-red-500' : 'border-gray-500'
+          }`}
+          placeholder='Pérez'
+        />
+        {userErrors?.lastName && (
+          <p className='mt-1 text-sm text-red-600'>
+            {userErrors?.lastName.message}
           </p>
         )}
       </div>
 
       <div>
-        <label className='block text-sm font-medium  mb-2'>
-          Email Corporativo *
-        </label>
+        <label className='block text-sm font-medium  mb-2'>Email *</label>
         <input
           type='email'
           {...register('user.email', {
@@ -59,7 +74,7 @@ export default function FirstStep() {
             },
           })}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            userErrors?.email ? 'border-red-500' : 'border-gray-300'
+            userErrors?.email ? 'border-red-500' : 'border-gray-500'
           }`}
           placeholder='contacto@miempresa.com'
         />
@@ -86,7 +101,7 @@ export default function FirstStep() {
               },
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              userErrors?.password ? 'border-red-500' : 'border-gray-300'
+              userErrors?.password ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='••••••••'
           />
@@ -109,7 +124,7 @@ export default function FirstStep() {
                 value === password || 'Las contraseñas no coinciden',
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              userErrors?.confirmPassword ? 'border-red-500' : 'border-gray-300'
+              userErrors?.confirmPassword ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='••••••••'
           />
@@ -121,7 +136,7 @@ export default function FirstStep() {
         </div>
       </div>
 
-      <div>
+      {/* <div>
         <label className='block text-sm font-medium  mb-2'>
           Teléfono de Contacto *
         </label>
@@ -136,7 +151,7 @@ export default function FirstStep() {
             },
           })}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            userErrors?.phone ? 'border-red-500' : 'border-gray-300'
+            userErrors?.phone ? 'border-red-500' : 'border-gray-500'
           }`}
           placeholder='+54 11 1234-5678'
         />
@@ -145,7 +160,7 @@ export default function FirstStep() {
             {userErrors?.phone.message}
           </p>
         )}
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
-import { createClient } from '@/lib/supabase/client'
-import { Mail, AlertCircle, EyeOff, Eye, Lock } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Mail, AlertCircle, EyeOff, Eye, Lock, Loader2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -11,30 +11,45 @@ interface FormDataLogin {
 export default function LoginForm() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
+  const queryClient = useQueryClient()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormDataLogin>()
 
-  const onSubmit = async (data: FormDataLogin) => {
-    console.log('Login:', data)
-    // reempazar con la conexión al backend
-    const supabase = createClient()
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
+  const onSubmit = useMutation({
+    mutationFn: async (data: FormDataLogin) => {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(data),
       })
-      if (!error) {
-        router.push('/')
+      if (!response.ok) {
+        throw new Error('Error al iniciar sesión', {
+          cause: await response.json().then((res) => res.error),
+        })
       }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+      return await response.json()
+    },
+    onSuccess: () => {
+      router.push('/')
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+    },
+    onError: (error) => {
+      console.log(error.cause, 'error')
+    },
+  })
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
+    <form
+      onSubmit={handleSubmit((data) => onSubmit.mutate(data))}
+      className='space-y-5'
+    >
+      {onSubmit.isError && (
+        <div role='alert' className='alert alert-error alert-outline'>
+          <AlertCircle className='w-6 h-6' />
+          <span>{onSubmit.error.cause as string}</span>
+        </div>
+      )}
       {/* Email */}
       <div>
         <label className='block text-sm font-medium  mb-2'>Email</label>
@@ -50,7 +65,7 @@ export default function LoginForm() {
               },
             })}
             className={`w-full pl-11 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
+              errors.email ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='tu@empresa.com'
           />
@@ -78,7 +93,7 @@ export default function LoginForm() {
               },
             })}
             className={`w-full pl-11 pr-11 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-              errors.password ? 'border-red-500' : 'border-gray-300'
+              errors.password ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='••••••••'
           />
@@ -115,9 +130,13 @@ export default function LoginForm() {
       {/* Submit Button */}
       <button
         type='submit'
-        className='w-full bg-gradient-to-r from-blue-600 to-blue-700  py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl'
+        className='w-full bg-gradient-to-r from-blue-600 to-blue-700  py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl flex items-center justify-center'
       >
-        Iniciar Sesión
+        {onSubmit.isPending ? (
+          <Loader2Icon className='  animate-spin' />
+        ) : (
+          'Iniciar Sesión'
+        )}
       </button>
     </form>
   )

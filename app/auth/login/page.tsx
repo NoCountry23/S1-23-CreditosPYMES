@@ -15,7 +15,7 @@ export default function Login() {
         </div>
 
         {/* Login Card */}
-        <div className='flex flex-col rounded-2xl shadow-xl p-8 border border-gray-100'>
+        <div className='flex flex-col rounded-2xl shadow-xl p-8 border border-gray-500'>
           <LoginForm />
 
           {/* Divider */}

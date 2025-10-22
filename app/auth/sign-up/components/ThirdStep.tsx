@@ -33,7 +33,7 @@ export default function ThirdStep() {
             minLength: { value: 5, message: 'Dirección muy corta' },
           })}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            legalErrors?.address ? 'border-red-500' : 'border-gray-300'
+            legalErrors?.address ? 'border-red-500' : 'border-gray-500'
           }`}
           placeholder='Av. Corrientes 1234, Piso 5, Oficina B'
         />
@@ -53,7 +53,7 @@ export default function ThirdStep() {
               required: 'La ciudad es requerida',
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              legalErrors?.city ? 'border-red-500' : 'border-gray-300'
+              legalErrors?.city ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='Buenos Aires'
           />
@@ -71,7 +71,7 @@ export default function ThirdStep() {
               required: 'Selecciona una provincia',
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              legalErrors?.province ? 'border-red-500' : 'border-gray-300'
+              legalErrors?.province ? 'border-red-500' : 'border-gray-500'
             }`}
           >
             <option value=''>Seleccionar...</option>
@@ -103,7 +103,7 @@ export default function ThirdStep() {
               },
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              legalErrors?.zipCode ? 'border-red-500' : 'border-gray-300'
+              legalErrors?.zipCode ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='1234'
           />
@@ -125,7 +125,7 @@ export default function ThirdStep() {
               required: 'Selecciona una opción',
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              legalErrors?.employees ? 'border-red-500' : 'border-gray-300'
+              legalErrors?.employees ? 'border-red-500' : 'border-gray-500'
             }`}
           >
             <option value=''>Seleccionar...</option>
@@ -154,7 +154,7 @@ export default function ThirdStep() {
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
               legalErrors?.estimatedAnnualBilling
                 ? 'border-red-500'
-                : 'border-gray-300'
+                : 'border-gray-500'
             }`}
           >
             <option value=''>Seleccionar...</option>
@@ -179,7 +179,7 @@ export default function ThirdStep() {
         <textarea
           {...register('legalInfo.activityDescription')}
           rows={4}
-          className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          className='w-full px-4 py-3 border border-gray-500/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           placeholder='Describe brevemente la actividad principal de tu empresa...'
         ></textarea>
       </div>

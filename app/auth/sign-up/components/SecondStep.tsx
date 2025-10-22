@@ -31,7 +31,7 @@ export default function SecondStep() {
             minLength: { value: 3, message: 'Mínimo 3 caracteres' },
           })}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            companyErrors?.companyName ? 'border-red-500' : 'border-gray-300'
+            companyErrors?.companyName ? 'border-red-500' : 'border-gray-500'
           }`}
           placeholder='Mi Empresa S.R.L.'
         />
@@ -49,7 +49,7 @@ export default function SecondStep() {
         <input
           type='text'
           {...register('company.tradeName')}
-          className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          className='w-full px-4 py-3 border border-gray-500/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           placeholder='Mi Empresa'
         />
       </div>
@@ -67,7 +67,7 @@ export default function SecondStep() {
               },
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              companyErrors?.cuit ? 'border-red-500' : 'border-gray-300'
+              companyErrors?.cuit ? 'border-red-500' : 'border-gray-500'
             }`}
             placeholder='30-12345678-9'
           />
@@ -87,7 +87,7 @@ export default function SecondStep() {
               required: 'Selecciona un rubro',
             })}
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              companyErrors?.industry ? 'border-red-500' : 'border-gray-300'
+              companyErrors?.industry ? 'border-red-500' : 'border-gray-500'
             }`}
           >
             <option value=''>Seleccionar...</option>
@@ -124,7 +124,7 @@ export default function SecondStep() {
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
             companyErrors?.yearsInBusiness
               ? 'border-red-500'
-              : 'border-gray-300'
+              : 'border-gray-500'
           }`}
           placeholder='5'
         />
@@ -145,7 +145,7 @@ export default function SecondStep() {
               message: 'URL inválida (incluye http:// o https://)',
             },
           })}
-          className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          className='w-full px-4 py-3 border border-gray-500/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
           placeholder='https://www.miempresa.com'
         />
         {companyErrors?.website && (

@@ -1,18 +1,29 @@
+'use client'
 import DashboardClient from '@/components/dashboardClient/DashboardClient'
 import DashboardOperator from '@/components/dashboardOperator/DashboardOperator'
-import Landing from '@/components/Landing'
-import { createClient } from '@/lib/supabase/server'
+import Landing from '@/components/landing/Landing'
+import { createClient } from '@/lib/supabase/client'
+import { useQuery } from '@tanstack/react-query'
 
-export default async function Home() {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getUser()
-  if (data.user === null) {
+export default function Home() {
+  const supabase = createClient()
+
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const { data } = await supabase.auth.getUser()
+      return data?.user
+    },
+    refetchOnWindowFocus: false,
+  })
+
+  if (user === null) {
     return <Landing />
   }
-  if (data.user.user_metadata.role === 'operator') {
+  if (user && user.user_metadata.role === 'operator') {
     return <DashboardOperator />
   }
-  if (data.user.user_metadata.role === 'client') {
+  if (user && user.user_metadata.role === 'representante') {
     return <DashboardClient />
   }
 }

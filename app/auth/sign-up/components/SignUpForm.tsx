@@ -14,15 +14,18 @@ import {
   ArrowRight,
   CheckCircle,
   ArrowLeft,
+  Loader2Icon,
 } from 'lucide-react'
 import Link from 'next/link'
+import { useMutation } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 export type FormDataSignUp = {
   user: {
-    fullName: string
+    firstName: string
+    lastName: string
     email: string
     password: string
     confirmPassword: string
-    phone: string
   }
   company: {
     companyName: string
@@ -31,6 +34,7 @@ export type FormDataSignUp = {
     industry: string
     yearsInBusiness: string
     website: string
+    phone: string
   }
   legalInfo: {
     address: string
@@ -51,6 +55,7 @@ const steps = [
   { number: 4, title: 'Documentación', icon: Upload },
 ]
 export default function SignUpForm() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState(1)
   const [uploadedFiles, setUploadedFiles] = useState({})
 
@@ -80,9 +85,38 @@ export default function SignUpForm() {
     }
   }
 
-  const onSubmit = (data: FormDataSignUp) => {
-    console.log({ ...data, uploadedFiles })
-  }
+  const onSubmit = useMutation({
+    mutationFn: async (data: FormDataSignUp) => {
+      const { user, company, legalInfo, documents } = data
+      // crea el usuario
+      try {
+        const resCreateClient = await fetch(
+          '/api/auth/register-representante',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              nombre: user.firstName,
+              apellido: user.lastName,
+              email: user.email,
+              password: user.password,
+            }),
+          }
+        )
+        if (!resCreateClient.ok) {
+          throw new Error('Error al crear el usuario', {
+            cause: await resCreateClient.json().then((res) => res.error),
+          })
+        }
+        // crear empresa (company y legalInfo)
+        // crear documentos
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    onSuccess: () => {
+      router.push('/auth/sign-up-success')
+    },
+  })
   return (
     <div className='flex flex-col gap-4 max-w-3xl mx-auto p-6'>
       <h1 className='text-center font-bold text-3xl'>Regístrate ahora</h1>
@@ -91,8 +125,8 @@ export default function SignUpForm() {
       </div>
       <FormProvider {...methods}>
         <form
-          onSubmit={methods.handleSubmit(onSubmit)}
-          className='flex flex-col  gap-4'
+          onSubmit={methods.handleSubmit((data) => onSubmit.mutate(data))}
+          className='flex flex-col w-full  gap-4'
         >
           {currentStep === 1 && <FirstStep />}
           {currentStep === 2 && <SecondStep />}
@@ -136,8 +170,14 @@ export default function SignUpForm() {
                 type='submit'
                 className='flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-green-600 to-green-700  rounded-lg hover:from-green-700 hover:to-green-800 transition-all font-medium shadow-lg hover:shadow-xl'
               >
-                <CheckCircle className='w-5 h-5' />
-                Completar Registro
+                {onSubmit.isPending ? (
+                  <Loader2Icon className='w-5 h-5 animate-spin' />
+                ) : (
+                  <>
+                    <CheckCircle className='w-5 h-5' />
+                    Completar Registro
+                  </>
+                )}
               </button>
             )}
           </div>

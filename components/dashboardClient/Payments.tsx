@@ -11,8 +11,8 @@ const paymentHistory = [
 ]
 export default function Payments() {
   return (
-    <div className=' rounded-xl shadow-sm border border-gray-500'>
-      <div className='p-6 border-b border-gray-500'>
+    <div className=' rounded-xl shadow-sm overflow-hidden border border-gray-500/50 '>
+      <div className='p-6 bg-slate-500/10 border-b border-gray-500/50  dark:bg-base-100 '>
         <h3 className='text-lg font-semibold '>Historial de Pagos</h3>
       </div>
       <div className='p-6'>
@@ -20,7 +20,7 @@ export default function Payments() {
           {paymentHistory.map((payment, index) => (
             <div
               key={index}
-              className='flex items-center justify-between p-4  rounded-lg hover:bg-gray-500/50 transition-colors'
+              className='flex items-center justify-between p-4  rounded-lg hover:bg-slate-500/20 transition-colors'
             >
               <div className='flex items-center gap-4'>
                 <div
