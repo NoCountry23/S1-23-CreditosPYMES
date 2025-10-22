@@ -34,7 +34,6 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    // 🎪 Registrar como operador
     const { data, error } = await supabase.auth.signUp({
         email,
         password,

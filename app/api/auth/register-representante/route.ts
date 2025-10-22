@@ -23,7 +23,8 @@ export async function POST(request: NextRequest) {
                 role: 'representante',  // ← FIJO, no se puede cambiar
                 nombre: nombre,
                 apellido: apellido || ''
-            }
+            },
+            emailRedirectTo: ''
         }
     });
 
