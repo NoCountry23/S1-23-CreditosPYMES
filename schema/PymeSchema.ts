@@ -35,6 +35,7 @@ export const PymeSchema = z.object({
 
     // industry (character varying)
     industry: z.string().trim().min (1, { message: "El sector no debe estar vacío." }).max(100, { message: "El sector no puede exceder los 100 caracteres." }),
+    phone: z.string().trim().min(1, { message: "El teléfono no debe estar vacío." }).max(100, { message: "El teléfono no puede exceder los 100 caracteres." }),
 
     // annual_billing_estimated (double precision) - Control de valor
     annual_billing_estimated: z.number({
@@ -71,6 +72,8 @@ export const PymeSchema = z.object({
         error: "El código postal debe ser un número entero."
     })
         .int({ message: "El código postal debe ser un número entero." }),
+
+    user_id: z.string().trim().min(1, { message: "El ID del usuario no debe estar vacío." }),
 
     // activity_description (character varying)
     activity_description: z.string().trim().min(1, { message: "La descripción no debe estar vacía." }).max(500, { message: "La descripción es demasiado larga." }),
