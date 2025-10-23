@@ -25,10 +25,7 @@ export default async function ClientDashboard() {
         Bienvenido, {user.email}
       </h2>
       <p>
-        Rol:{" "}
-        <span className="font-semibold text-gray-700">
-          {role}
-        </span>
+        Rol: <span className="font-semibold text-gray-700">{role}</span>
       </p>
 
       <p className="mt-4 text-gray-600">

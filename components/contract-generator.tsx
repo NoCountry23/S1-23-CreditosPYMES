@@ -1,57 +1,64 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface ContractGeneratorProps {
   onContractGenerated?: (data: any) => void;
 }
 
-export default function ContractGenerator({ onContractGenerated }: ContractGeneratorProps) {
-  const [prestamoId, setPrestamoId] = useState<string>('');
+export default function ContractGenerator({
+  onContractGenerated,
+}: ContractGeneratorProps) {
+  const [prestamoId, setPrestamoId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validar que el ID sea un número
     const id = parseInt(prestamoId);
     if (isNaN(id) || id <= 0) {
-      setError('Por favor ingresa un ID de préstamo válido');
+      setError("Por favor ingresa un ID de préstamo válido");
       return;
     }
 
     setIsLoading(true);
-    setError('');
+    setError("");
     setResult(null);
 
     try {
-      const response = await fetch('/api/contracts/generate', {
-        method: 'POST',
+      const response = await fetch("/api/contracts/generate", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prestamo_id: id
-        })
+          prestamo_id: id,
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Error al generar el contrato');
+        throw new Error(data.error || "Error al generar el contrato");
       }
 
       setResult(data);
       onContractGenerated?.(data);
-      
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error inesperado');
+      setError(err instanceof Error ? err.message : "Error inesperado");
     } finally {
       setIsLoading(false);
     }
@@ -80,13 +87,13 @@ export default function ContractGenerator({ onContractGenerated }: ContractGener
                 disabled={isLoading}
               />
             </div>
-            
-            <Button 
-              type="submit" 
+
+            <Button
+              type="submit"
               disabled={isLoading || !prestamoId}
               className="w-full"
             >
-              {isLoading ? 'Generando contrato...' : 'Generar Contrato'}
+              {isLoading ? "Generando contrato..." : "Generar Contrato"}
             </Button>
           </form>
         </CardContent>
@@ -107,22 +114,41 @@ export default function ContractGenerator({ onContractGenerated }: ContractGener
       {result && (
         <Card className="border-green-200 bg-green-50">
           <CardHeader>
-            <CardTitle className="text-green-800">✅ Contrato Generado Exitosamente</CardTitle>
+            <CardTitle className="text-green-800">
+              ✅ Contrato Generado Exitosamente
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="text-green-700">
-              <p><strong>Mensaje:</strong> {result.message}</p>
+              <p>
+                <strong>Mensaje:</strong> {result.message}
+              </p>
             </div>
-            
+
             {/* Información del préstamo */}
             {result.contract_data?.prestamo && (
               <div className="bg-white p-4 rounded-lg border">
-                <h4 className="font-semibold mb-2">Información del Préstamo:</h4>
+                <h4 className="font-semibold mb-2">
+                  Información del Préstamo:
+                </h4>
                 <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div><strong>ID:</strong> {result.contract_data.prestamo.id_prestamo}</div>
-                  <div><strong>Monto:</strong> {result.contract_data.prestamo.monto} {result.contract_data.prestamo.currency}</div>
-                  <div><strong>Plazo:</strong> {result.contract_data.prestamo.term_months} meses</div>
-                  <div><strong>Estado:</strong> {result.contract_data.prestamo.status}</div>
+                  <div>
+                    <strong>ID:</strong>{" "}
+                    {result.contract_data.prestamo.id_prestamo}
+                  </div>
+                  <div>
+                    <strong>Monto:</strong>{" "}
+                    {result.contract_data.prestamo.monto}{" "}
+                    {result.contract_data.prestamo.currency}
+                  </div>
+                  <div>
+                    <strong>Plazo:</strong>{" "}
+                    {result.contract_data.prestamo.term_months} meses
+                  </div>
+                  <div>
+                    <strong>Estado:</strong>{" "}
+                    {result.contract_data.prestamo.status}
+                  </div>
                 </div>
               </div>
             )}
@@ -130,12 +156,26 @@ export default function ContractGenerator({ onContractGenerated }: ContractGener
             {/* Información de la empresa */}
             {result.contract_data?.prestamo?.pyme && (
               <div className="bg-white p-4 rounded-lg border">
-                <h4 className="font-semibold mb-2">Información de la Empresa:</h4>
+                <h4 className="font-semibold mb-2">
+                  Información de la Empresa:
+                </h4>
                 <div className="grid grid-cols-1 gap-2 text-sm">
-                  <div><strong>Empresa:</strong> {result.contract_data.prestamo.pyme.company_name}</div>
-                  <div><strong>CUIL/CUIT:</strong> {result.contract_data.prestamo.pyme.cuil_cuit}</div>
-                  <div><strong>Email:</strong> {result.contract_data.prestamo.pyme.email}</div>
-                  <div><strong>Industria:</strong> {result.contract_data.prestamo.pyme.industry}</div>
+                  <div>
+                    <strong>Empresa:</strong>{" "}
+                    {result.contract_data.prestamo.pyme.company_name}
+                  </div>
+                  <div>
+                    <strong>CUIL/CUIT:</strong>{" "}
+                    {result.contract_data.prestamo.pyme.cuil_cuit}
+                  </div>
+                  <div>
+                    <strong>Email:</strong>{" "}
+                    {result.contract_data.prestamo.pyme.email}
+                  </div>
+                  <div>
+                    <strong>Industria:</strong>{" "}
+                    {result.contract_data.prestamo.pyme.industry}
+                  </div>
                 </div>
               </div>
             )}

@@ -1,4 +1,4 @@
-import ContractGenerator from '@/components/contract-generator';
+import ContractGenerator from "@/components/contract-generator";
 
 export default function ContractsPage() {
   return (
@@ -9,10 +9,11 @@ export default function ContractsPage() {
             Generador de Contratos
           </h1>
           <p className="text-gray-600">
-            Genera contratos de préstamos para empresas de forma rápida y sencilla
+            Genera contratos de préstamos para empresas de forma rápida y
+            sencilla
           </p>
         </div>
-        
+
         <ContractGenerator />
       </div>
     </div>

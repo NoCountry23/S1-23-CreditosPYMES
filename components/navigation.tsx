@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function Navigation() {
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/', label: 'Inicio' },
-    { href: '/contracts', label: 'Contratos' },
-    { href: '/protected', label: 'Área Protegida' },
+    { href: "/", label: "Inicio" },
+    { href: "/contracts", label: "Contratos" },
+    { href: "/protected", label: "Área Protegida" },
   ];
 
   return (
@@ -28,8 +28,8 @@ export default function Navigation() {
                   href={item.href}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     pathname === item.href
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                   }`}
                 >
                   {item.label}
@@ -37,7 +37,7 @@ export default function Navigation() {
               ))}
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <AuthButton />
           </div>

@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     if (!file || !pyme_id || !document_type || !uploaded_by) {
       return NextResponse.json(
         { error: "Faltan campos requeridos: file, pyme_id, document_type" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -31,14 +31,14 @@ export async function POST(request: NextRequest) {
         {
           error: "Tipo de archivo no permitido. Solo se aceptan PDF, JPG, PNG",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (file.size > maxSize) {
       return NextResponse.json(
         { error: "El archivo es demasiado grande. Máximo 10MB" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     if (uploadError) {
       return NextResponse.json(
         { error: "Error subiendo archivo: " + uploadError.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json(
         { error: "Error guardando en base de datos: " + dbError.message },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     return NextResponse.json(
       { error: "Error interno: " + error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

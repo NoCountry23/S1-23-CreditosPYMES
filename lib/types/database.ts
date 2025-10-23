@@ -1,46 +1,127 @@
-// Tipos para las tablas de la base de datos
-// Estos tipos representan la estructura exacta de tus tablas en Supabase
-
+// =========================
+// PyME
+// =========================
 export interface Pyme {
-  id: number;
-  created_at: string; // timestamptz se convierte a string en JavaScript
+  id: string;
   company_name: string;
   cuil_cuit: string;
-  address: string;
-  email: string;
-  industry: string;
-  updated_at: string; // date se convierte a string
+  address?: string;
+  email?: string;
+  industry?: string;
+  created_at: string;   // ISO date string
+  updated_at: string;
+  annual_billing_estimated?: number;
+  amount_employees?: number;
+  merch_years?: number;
+  legal_address?: string;
+  city?: string;
+  local_state?: string;
+  postal_code?: number;
+  activity_description?: string;
+  phone: string;
+  user_id: string;
 }
 
+// =========================
+// Préstamos
+// =========================
 export interface Prestamo {
-  id_prestamo: number;
+  id: string;
+  pyme_id: string;
+  monto: number;
+  currency?: string; // default 'ARS'
+  term_months: number;
+  cant_cuo: number;
+  purpose?: string;
+  status?: string; // default 'pendiente'
+  submitted_at: string;
+  decision_at?: string;
+  rejection_reason?: string;
+  operator_id?: string;
+  representante_id: string;
   created_at: string;
-  pyme_id: number; // Foreign key que apunta a pymes.id
-  representante_id: number;
-  operador_id: number;
-  monto: number; // numeric se convierte a number
-  currency: string;
-  term_months: number; // int2 se convierte a number
-  cant_cuotas: number; // int2 se convierte a number
-  purpose: string;
-  status: string;
-  submitted_at: string | null; // date puede ser null
-  decision_at: string | null; // date puede ser null
-  rejection_reason: string | null; // text puede ser null
+  updated_at: string;
 }
 
-// Tipo para cuando haces JOIN entre prestamo y pyme
-export interface PrestamoWithPyme extends Prestamo {
-  pyme: Pyme;
+// =========================
+// Documentos de contrato
+// =========================
+export interface ContractDocument {
+  id: string;
+  pyme_id?: string;
+  prestamo_id?: string;
+  docusign_submission_id?: string;
+  document_name: string;
+  status?: string; // default 'draft'
+  signer_email?: string;
+  document_url?: string;
+  sent_at?: string;
+  completed_at?: string;
+  expires_at?: string;
+  metadata?: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
 }
 
-// Tipos para las respuestas de la API
-export interface ApiResponse<T> {
-  data: T | null;
-  error: string | null;
+// =========================
+// Documentos de soporte
+// =========================
+export interface SupportDocument {
+  id: string;
+  pyme_id: string;
+  prestamo_id?: string;
+  uploaded_by: string;
+  file_name: string;
+  storage_path: string;
+  file_size?: number;
+  file_type?: string;
+  document_type: string;
+  status?: string; // default 'verified'
+  verification_notes?: string;
+  verified_at?: string;
+  created_at: string;
+  updated_at: string;
 }
 
-// Tipos para los parámetros de entrada
-export interface GenerateContractRequest {
-  prestamo_id: number;
+// =========================
+// Cuotas
+// =========================
+export interface Quota {
+  id: string;
+  prestamo_id: string;
+  numero_cuota: number;
+  fecha_vencimiento: string; // date
+  amount: number;
+  status?: string; // default 'pending'
+  paid_at?: string;
+  paid_amount?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// =========================
+// Historial de pagos
+// =========================
+export interface PaymentHistory {
+  id: string;
+  pyme_id: string;
+  prestamo_id: string;
+  amount: number;
+  payment_date: string; // date
+  payment_method: string;
+  reference?: string;
+  registered_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// =========================
+// Sugerencias IA
+// =========================
+export interface SugerenciaIA {
+  id: number;
+  created_at: string;
+  nivel_riesgo?: string;
+  aplicatiom?: string; // ojo: en SQL está escrito "aplicatiom"
+  state?: string;
 }

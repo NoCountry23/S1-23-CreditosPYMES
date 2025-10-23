@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(resquest: NextRequest) {
+export async function POST() {
   try {
     const supabase = await createClient();
 
@@ -11,7 +11,7 @@ export async function POST(resquest: NextRequest) {
       console.error("Error en logout:", error.message);
       return NextResponse.json(
         { error: "Error al cerrar la sesión" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
