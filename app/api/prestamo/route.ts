@@ -16,7 +16,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Formato de solicitud JSON inválido.' }, { status: 500 });
     }
 
-  
     const validationResult = PrestamoSchema.safeParse(requestBody);
 
     if (!validationResult.success) {
@@ -35,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     try {
         // 3. Insertar SOLO los datos validados
-        const { data, error } = await supabase.from('prestamo')
+        const { data, error } = await supabase.from('prestamos')
             .insert(datosValidados) // 👈 Usamos datosValidados
             .select() 
             .single(); // Añadimos .single() para obtener el objeto directamente, como hicimos antes.
@@ -45,9 +44,15 @@ export async function POST(request: NextRequest) {
             // Error de base de datos (ej: restricción de clave foránea)
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
-
+        const prestamo = {
+            id: data?.id,
+            pymeId: data?.pyme_id,
+            monto: data?.monto,
+            currency: data?.currency,
+            termMonths: data?.term_months,
+        }
         // Si la inserción es exitosa, data ya contiene el objeto del préstamo
-        return NextResponse.json(data, { status: 201 });
+        return NextResponse.json(prestamo, { status: 201 });
 
     } catch (error) {
         console.error('Internal Server Error:', error);

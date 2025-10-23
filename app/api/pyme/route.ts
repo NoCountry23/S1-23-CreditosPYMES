@@ -46,8 +46,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
-       
-        return NextResponse.json(data, { status: 201 });
+        const pyme = {
+            id: data.id,
+            company_name: data.company_name,
+            email: data.email,
+            address: data.address
+        }
+        return NextResponse.json(pyme, { status: 201 });
 
     } catch (error) {
         console.error('Internal Server Error:', error);
