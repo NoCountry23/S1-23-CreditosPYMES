@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     if (!file || !pyme_id || !document_type || !uploaded_by) {
       return NextResponse.json(
         { error: "Faltan campos requeridos: file, pyme_id, document_type" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -31,14 +31,14 @@ export async function POST(request: NextRequest) {
         {
           error: "Tipo de archivo no permitido. Solo se aceptan PDF, JPG, PNG",
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     if (file.size > maxSize) {
       return NextResponse.json(
         { error: "El archivo es demasiado grande. Máximo 10MB" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -56,14 +56,23 @@ export async function POST(request: NextRequest) {
     // Si hay prestamo_id, incluir en el path, sino solo user.id
     const filePath = `${uploaded_by}/${fileName}`;
 
-    const { data: storageData, error: uploadError } = await supabase.storage
+    const { data: publicUrlData  } = await supabase.storage
+     .from("support-documents")
+     .getPublicUrl(filePath)
+
+     const public_url = publicUrlData.publicUrl
+
+
+    const { error: uploadError } = await supabase.storage
       .from("support-documents")
       .upload(filePath, file);
+
+      
 
     if (uploadError) {
       return NextResponse.json(
         { error: "Error subiendo archivo: " + uploadError.message },
-        { status: 500 },
+        { status: 500 }
       );
     }
 
@@ -75,7 +84,7 @@ export async function POST(request: NextRequest) {
           uploaded_by: uploaded_by,
           document_type,
           file_name: file.name,
-          storage_path: filePath,
+          storage_path: public_url,
           file_size: file.size,
           file_type: file.type,
           status: "UPLOADED",
@@ -90,7 +99,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json(
         { error: "Error guardando en base de datos: " + dbError.message },
-        { status: 500 },
+        { status: 500 }
       );
     }
 
@@ -99,10 +108,12 @@ export async function POST(request: NextRequest) {
       message: "✅ Documento subido correctamente",
       document: dbData,
     });
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: "Error interno: " + error.message },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: "Error interno: " + error.message },
+        { status: 500 }
+      );
+    }
   }
 }
