@@ -8,11 +8,31 @@ export async function POST(request: NextRequest) {
   if (!email || !password || !nombre) {
     return NextResponse.json(
       { error: "Email, password y nombre son requeridos" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   const supabase = await createClient();
+
+  const { data: existingUser, error: checkError } = await supabase
+    .from("auth.users")
+    .select("email")
+    .eq("email", email)
+    .limit(1);
+
+  if (existingUser && existingUser.length > 0) {
+    return NextResponse.json(
+      { error: "Ya existe un usuario con este email" },
+      { status: 400 }
+    );
+  }
+
+  if (checkError) {
+    return NextResponse.json(
+      { error: "Error verificando el email: " + checkError.message },
+      { status: 500 }
+    );
+  }
 
   const { data, error } = await supabase.auth.signUp({
     email,

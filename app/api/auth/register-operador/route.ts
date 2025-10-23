@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
 
   const supabase = await createClient();
 
-  // 🔐 VERIFICAR que el usuario actual es ADMIN
   const {
     data: { user: currentUser },
     error: authError,
@@ -30,6 +29,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { error: "Solo administradores pueden crear operadores" },
       { status: 403 },
+    );
+  }
+
+  const { data: existingUser, error: checkError } = await supabase
+    .from("auth.users")
+    .select("email")
+    .eq("email", email)
+    .limit(1);
+
+  if (existingUser && existingUser.length > 0) {
+    return NextResponse.json(
+      { error: "Ya existe un usuario con este email" },
+      { status: 400 }
+    );
+  }
+
+  if (checkError) {
+    return NextResponse.json(
+      { error: "Error verificando el email: " + checkError.message },
+      { status: 500 }
     );
   }
 
