@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { QueryProvider } from "@/context/QueryProvider";
 import Header from "@/components/header";
+import ClientLayout from "./ClientLayout";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -37,7 +38,7 @@ export default function RootLayout({
         >
           <QueryProvider>
             <Header />
-            {children}
+            <ClientLayout>{children}</ClientLayout>
           </QueryProvider>
         </ThemeProvider>
       </body>
