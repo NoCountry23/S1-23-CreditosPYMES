@@ -19,14 +19,13 @@ export default async function DashboardLayout({
   const role = user?.user_metadata?.role || "unknown";
 
   return (
-    <div className="flex flex-col"
-    style={{ minHeight: "calc(100vh - 6rem)" }} // Resta del header aprox.
+    <div
+      className="flex flex-col"
+      style={{ minHeight: "calc(100vh - 6rem)" }} // Resta del header aprox.
     >
       {/* Navbar */}
       <header className="bg-gray-900 text-white p-4 flex flex-wrap sm:flex-nowrap justify-between items-center">
-        <h1 className="text-lg sm:text-xl font-bold mb-2 sm:mb-0">
-          Dashboard
-        </h1>
+        <h1 className="text-lg sm:text-xl font-bold mb-2 sm:mb-0">Dashboard</h1>
 
         <div className="flex flex-wrap gap-2 sm:gap-4 items-center max-w-full">
           <span
@@ -42,9 +41,7 @@ export default async function DashboardLayout({
       </header>
 
       {/* Contenido principal */}
-      <main className="flex-1 p-6 bg-gray-100 overflow-auto">
-        {children}
-      </main>
+      <main className="flex-1 p-6 bg-gray-100 overflow-auto">{children}</main>
     </div>
   );
 }
