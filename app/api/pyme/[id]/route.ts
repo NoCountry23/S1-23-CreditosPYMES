@@ -70,8 +70,6 @@ export async function PUT(
       {
         message: `Datos de la Pyme (ID: ${id}) actualizados correctamente.`,
         pymeId: id,
-        // Puedes incluir 'data' si quieres los datos actualizados, pero con un mensaje
-        // updatedData: data
       },
       { status: 200 },
     );

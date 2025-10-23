@@ -20,34 +20,23 @@ export const PymeSchema = z.object({
     .string({
       error: "El CUIL/CUIT es obligatorio.",
     })
-    .trim()
-    .length(13, {
-      message:
-        "El CUIL/CUIT debe tener 13 caracteres, incluyendo guiones (XX-XXXXXXXX-X).",
-    })
-    .regex(/^\d{2}-\d{8}-\d{1}$/, {
-      message: "Formato de CUIL/CUIT inválido. Use el formato XX-XXXXXXXX-X.",
-    }),
+        .trim()
+        .length(13, { message: "El CUIL/CUIT debe tener 13 caracteres, incluyendo guiones (XX-XXXXXXXX-X)." })
+        .regex(/^\d{2}-\d{8}-\d{1}$/, { message: "Formato de CUIL/CUIT inválido. Use el formato XX-XXXXXXXX-X." }),
 
-  // address (character varying)
-  address: z
-    .string()
-    .trim()
-    .min(1, { message: "La dirección no debe estar vacía." })
-    .max(255, { message: "La dirección no puede exceder los 255 caracteres." }),
 
-  // email (character varying) - Control de formato estricto
-  email: z
-    .email({ message: "El formato del email es inválido." })
-    .trim()
-    .max(255, { message: "El email no puede exceder los 255 caracteres." }),
+    // address (character varying)
+    address: z.string().trim().min(1, { message: "La dirección no debe estar vacía." }).max(255, { message: "La dirección no puede exceder los 255 caracteres." }),
 
-  // industry (character varying)
-  industry: z
-    .string()
-    .trim()
-    .min(1, { message: "El sector no debe estar vacío." })
-    .max(100, { message: "El sector no puede exceder los 100 caracteres." }),
+    // email (character varying) - Control de formato estricto
+    email: z.email({ message: "El formato del email es inválido." })
+  .trim()
+  .max(255, { message: "El email no puede exceder los 255 caracteres." }),
+ 
+
+    // industry (character varying)
+    industry: z.string().trim().min (1, { message: "El sector no debe estar vacío." }).max(100, { message: "El sector no puede exceder los 100 caracteres." }),
+    phone: z.string().trim().min(1, { message: "El teléfono no debe estar vacío." }).max(100, { message: "El teléfono no puede exceder los 100 caracteres." }),
 
   // annual_billing_estimated (double precision) - Control de valor
   annual_billing_estimated: z
@@ -73,12 +62,17 @@ export const PymeSchema = z.object({
     .min(0, { message: "Los años de antigüedad no pueden ser negativos." })
     .max(100, { message: "Valor de antigüedad irreal." }), // Regla lógica de negocio
 
+  // Identificador del usuario propietario / creador de la Pyme
+  user_id: z.string().trim().min(1, { message: "El ID del usuario no debe estar vacío." }),
+
   // legal_address (character varying)
   legal_address: z
     .string()
     .trim()
     .min(1, { message: "La dirección legal no debe estar vacía." })
     .max(255),
+
+  // activity_description (character varying)
 
   // city (character varying)
   city: z
