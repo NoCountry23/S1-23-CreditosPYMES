@@ -6,48 +6,38 @@ import SecondStep from "./SecondStep";
 import ThirdStep from "./ThirdStep";
 import FourthStep from "./FourthStep";
 import ProcessSteps from "./ProcessSteps";
-import {
-  User,
-  Building2,
-  FileText,
-  Upload,
-  ArrowRight,
-  CheckCircle,
-  ArrowLeft,
-  Loader2Icon,
-} from "lucide-react";
-import Link from "next/link";
+import { User, Building2, FileText, Upload } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 export type FormDataSignUp = {
   user: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  };
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    confirmPassword: string
+  }
   company: {
-    companyName: string;
-    tradeName: string;
-    cuit: string;
-    industry: string;
-    yearsInBusiness: string;
-    website: string;
-    phone: string;
-  };
+    companyName: string
+    cuit: string
+    industry: string
+    email: string
+    yearsInBusiness: string
+    website: string
+    phone: string
+  }
   legalInfo: {
-    address: string;
-    city: string;
-    province: string;
-    zipCode: string;
-    employees: string;
-    estimatedAnnualBilling: string;
-    activityDescription: string;
-  };
-  documents: File[];
-  acceptTerms: boolean;
-};
+    address: string
+    city: string
+    province: string
+    zipCode: string
+    employees: string
+    estimatedAnnualBilling: string
+    activityDescription: string
+  }
+  acceptTerms: boolean
+}
 const steps = [
   { number: 1, title: "Datos de Acceso", icon: User },
   { number: 2, title: "Datos de la Empresa", icon: Building2 },
@@ -57,9 +47,38 @@ const steps = [
 export default function SignUpForm() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
-  const [uploadedFiles, setUploadedFiles] = useState({});
+  const [uploadedFiles, setUploadedFiles] = useState<{
+    [key: string]: File | null
+  }>({});
 
-  const methods = useForm<FormDataSignUp>();
+  const methods = useForm<FormDataSignUp>({
+    defaultValues: {
+      user: {
+        firstName: "juan",
+        lastName: "perez",
+        email: "l7t4w@example.com",
+        password: "Cuenta123",
+        confirmPassword: "Cuenta123",
+      },
+      company: {
+        companyName: "empresa",
+        cuit: "11-12345678-1",
+        email: "l7t4w@example.com",
+        industry: "industria",
+        yearsInBusiness: "10",
+        website: "http://www.empresa.com",
+      },
+      legalInfo: {
+        address: "calle 123",
+        city: "ciudad",
+        province: "CABA",
+        zipCode: "1234",
+        employees: "10",
+        estimatedAnnualBilling: "100000",
+        activityDescription: "actividad",
+      },
+    },
+  });
 
   const handleNext = async () => {
     const fieldsToValidate =
@@ -76,114 +95,165 @@ export default function SignUpForm() {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleFileUpload = (fieldName: string, files: FileList | null) => {
-    if (files) {
+  const handleFileUpload = (fieldName: string, file: File | null) => {
+    if (file) {
       setUploadedFiles((prev) => ({
         ...prev,
-        [fieldName]: Array.from(files),
+        [fieldName]: file,
+      }));
+    } else {
+      setUploadedFiles((prev) => ({
+        ...prev,
+        [fieldName]: null,
       }));
     }
   };
 
+  async function createUser(user: FormDataSignUp["user"]) {
+    const resCreateClient = await fetch("/api/auth/register-representante", {
+      method: "POST",
+      body: JSON.stringify({
+        nombre: user.firstName,
+        apellido: user.lastName,
+        email: user.email,
+        password: user.password,
+      }),
+    });
+    if (!resCreateClient.ok) {
+      throw new Error("Error al crear el usuario", {
+        cause: await resCreateClient.json().then((res) => res.error),
+      });
+    }
+    const data = await resCreateClient.json();
+    return data;
+  }
+  async function createCompany(
+    company: FormDataSignUp["company"],
+    legalInfo: FormDataSignUp["legalInfo"],
+    userId: string
+  ) {
+    const resCreatePyme = await fetch("/api/pyme", {
+      method: "POST",
+      body: JSON.stringify({
+        user_id: userId,
+        company_name: company.companyName,
+        cuil_cuit: company.cuit,
+        address: legalInfo.address,
+        legal_address: legalInfo.address,
+        industry: company.industry,
+        annual_billing_estimated: Number(legalInfo.estimatedAnnualBilling),
+        amount_employees: Number(legalInfo.employees),
+        merch_years: Number(company.yearsInBusiness),
+        city: legalInfo.city,
+        local_state: legalInfo.province,
+        postal_code: Number(legalInfo.zipCode),
+        activity_description: legalInfo.activityDescription,
+        phone: company.phone,
+        email: company.email,
+      }),
+    });
+    if (!resCreatePyme.ok) {
+      throw new Error("Error al crear la empresa", {
+        cause: await resCreatePyme.json().then((res) => res.error),
+      });
+    }
+    const data = await resCreatePyme.json();
+    return data;
+  }
+  async function uploadDocuments(companyId: string, userId: string) {
+    if (uploadedFiles[0] === null) {
+      return;
+    } else {
+      await Promise.all(
+        Object.entries(uploadedFiles).map(async ([key, value]) => {
+          const formData = new FormData();
+          formData.append("pyme_id", companyId);
+          formData.append("uploaded_by", userId);
+          formData.append("file", value as File);
+          formData.append("document_type", key);
+
+          const res = await fetch("/api/upload/support-documents", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!res.ok) {
+            throw new Error("Error al subir documento", {
+              cause: await res.json().then((r) => r.error),
+            });
+          }
+        })
+      );
+    }
+  }
   const onSubmit = useMutation({
     mutationFn: async (data: FormDataSignUp) => {
-      const { user, company, legalInfo, documents } = data;
-      // crea el usuario
+      const { user, company, legalInfo } = data;
       try {
-        const resCreateClient = await fetch(
-          "/api/auth/register-representante",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              nombre: user.firstName,
-              apellido: user.lastName,
-              email: user.email,
-              password: user.password,
-            }),
-          },
-        );
-        if (!resCreateClient.ok) {
-          throw new Error("Error al crear el usuario", {
-            cause: await resCreateClient.json().then((res) => res.error),
-          });
-        }
+        // crea el usuario
+        const {
+          user: { id: userId },
+        } = await createUser(user);
+
         // crear empresa (company y legalInfo)
+        const { id: companyId } = await createCompany(
+          company,
+          legalInfo,
+          userId
+        );
+
         // crear documentos
+        await uploadDocuments(companyId, userId);
+        // if (companyId && userId) {
+        // }
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     },
     onSuccess: () => {
       router.push("/auth/sign-up-success");
     },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error.cause as string);
+    },
   });
+
   return (
-    <div className="flex flex-col gap-4 max-w-3xl mx-auto p-6">
-      <h1 className="text-center font-bold text-3xl">Regístrate ahora</h1>
-      <div className="flex  gap-10 ">
+    <div className='flex flex-col gap-4  w-full max-w-4xl mx-auto p-6'>
+      <h1 className='text-center font-bold text-3xl'>Regístrate ahora</h1>
+      <div className='flex  gap-10 '>
         <ProcessSteps steps={steps} currentStep={currentStep} />
       </div>
       <FormProvider {...methods}>
         <form
           onSubmit={methods.handleSubmit((data) => onSubmit.mutate(data))}
-          className="flex flex-col w-full  gap-4"
+          className='flex flex-col w-full  gap-4'
         >
-          {currentStep === 1 && <FirstStep />}
-          {currentStep === 2 && <SecondStep />}
-          {currentStep === 3 && <ThirdStep />}
+          {currentStep === 1 && <FirstStep handleNext={handleNext} />}
+          {currentStep === 2 && (
+            <SecondStep
+              handleNext={handleNext}
+              handlePrevious={handlePrevious}
+            />
+          )}
+          {currentStep === 3 && (
+            <ThirdStep
+              handleNext={handleNext}
+              handlePrevious={handlePrevious}
+            />
+          )}
           {currentStep === 4 && (
             <FourthStep
               handleFileUpload={handleFileUpload}
               uploadedFiles={uploadedFiles}
+              loading={onSubmit.isPending}
+              handlePrevious={handlePrevious}
             />
           )}
-          <div className="flex justify-between flex-col lg:flex-row ">
-            {currentStep > 1 && (
-              <button
-                type="button"
-                onClick={handlePrevious}
-                className="flex items-center border border-slate-500/50 justify-center gap-2 px-6 py-3  text-gray rounded-lg hover:text-gray-500 transition-all font-medium"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Anterior
-              </button>
-            )}
-            <div className="flex items-center justify-center gap-3">
-              <Link
-                href="/auth/login"
-                className="px-6 py-3 text-gray-600 hover:text-gray-800 transition-all"
-              >
-                ¿Ya tienes cuenta? Inicia sesión
-              </Link>
-            </div>
-            {currentStep < 4 ? (
-              <button
-                type="button"
-                onClick={handleNext}
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700  rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all font-medium shadow-lg hover:shadow-xl"
-              >
-                Siguiente
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            ) : (
-              <button
-                type="submit"
-                className="flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-green-600 to-green-700  rounded-lg hover:from-green-700 hover:to-green-800 transition-all font-medium shadow-lg hover:shadow-xl"
-              >
-                {onSubmit.isPending ? (
-                  <Loader2Icon className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    <CheckCircle className="w-5 h-5" />
-                    Completar Registro
-                  </>
-                )}
-              </button>
-            )}
-          </div>
         </form>
         {/* Progress Indicator */}
-        <div className="text-center mt-6 text-sm text-gray-500">
+        <div className='text-center mt-6 text-sm text-gray-500'>
           Paso {currentStep} de 4
         </div>
       </FormProvider>

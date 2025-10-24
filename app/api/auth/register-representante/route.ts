@@ -14,13 +14,12 @@ export async function POST(request: NextRequest) {
 
   const supabase = await createClient();
 
-  const { data: existingUser, error: checkError } = await supabase
-    .from("auth.users")
-    .select("email")
-    .eq("email", email)
-    .limit(1);
+  const { data: usersList, error: checkError } =
+    await supabase.auth.admin.listUsers();
 
-  if (existingUser && existingUser.length > 0) {
+  const existingUser = usersList.users.find((u) => u.email === email);
+
+  if (existingUser) {
     return NextResponse.json(
       { error: "Ya existe un usuario con este email" },
       { status: 400 }
