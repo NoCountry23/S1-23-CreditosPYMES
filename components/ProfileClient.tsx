@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { usePyme } from "@/hooks/usePyme"; 
 import {
   Building2,
   Mail,
@@ -23,21 +24,58 @@ const ClientProfile = () => {
   const [activeTab, setActiveTab] = useState("company");
   const [isEditing, setIsEditing] = useState(false);
 
-  const companyData = {
-    legalName: "Comercial López S.R.L.",
-    tradeName: "López Distribuidora",
-    cuit: "30-12345678-9",
-    industry: "Comercio",
-    address: "Av. Corrientes 1234, Piso 5",
-    city: "Buenos Aires",
-    province: "CABA",
-    phone: "+54 11 4567-8900",
-    email: "contacto@comerciallopez.com",
-    website: "www.comerciallopez.com.ar",
-    yearsInBusiness: 7,
-    employees: 28,
-    annualRevenue: 3500000,
-  };
+  const { pyme, loading } = usePyme();
+
+  /* ----------  Mientras llega la data  ---------- */
+  /* 1️⃣  Mientras llega: mostramos guiones */
+  const companyData = loading
+    ? {
+        legalName: "---",
+        tradeName: "---",
+        cuit: "---",
+        industry: "---",
+        address: "---",
+        city: "---",
+        province: "---",
+        phone: "---",
+        email: "---",
+        website: "---",
+        yearsInBusiness: "-",
+        employees: "-",
+        annualRevenue: 0,
+      }
+    : {
+        legalName: pyme!.company_name,
+        tradeName: pyme!.company_name,
+        cuit: pyme!.cuil_cuit,
+        industry: pyme!.industry,
+        address: `${pyme!.legal_address}, ${pyme!.city}, ${pyme!.local_state}`,
+        city: pyme!.city,
+        province: pyme!.local_state,
+        phone: pyme!.phone,
+        email: pyme!.email,
+        website: pyme!.company_name.toLowerCase().replace(/\s/g, ""),
+        yearsInBusiness: pyme!.merch_years,
+        employees: pyme!.amount_employees,
+        annualRevenue: pyme!.annual_billing_estimated,
+      };
+
+
+  // const companyData = {
+  //   legalName: "Comercial López S.R.L.",
+  //   tradeName: "López Distribuidora",
+  //   cuit: "30-12345678-9",
+  //   industry: "Comercio",
+  //   address: "Av. Corrientes 1234, Piso 5",
+  //   city: "Buenos Aires",
+  //   province: "CABA",
+  //   phone: "+54 11 4567-8900",
+  //   email: "contacto@comerciallopez.com",
+  //   website: "www.comerciallopez.com.ar",
+  //   yearsInBusiness: 7,
+  //   employees: 28,
+  //   annualRevenue: 3500000,
+  // };
 
   const documents = [
     {
@@ -166,7 +204,7 @@ const ClientProfile = () => {
                   </div>
                 </div>
 
-                <div className="divider"></div>
+                <div className="divider divider-accent"></div>
 
                 <div className="alert alert-success">
                   <div className="flex flex-col w-full">
@@ -274,7 +312,7 @@ const ClientProfile = () => {
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="form-control flex items-center gap-2">
                           <label className="label">
-                            <span className="label-text">Razón Social</span>
+                            <span className="label-text">Razón Social:</span>
                           </label>
                           {isEditing ? (
                             <input
@@ -288,7 +326,7 @@ const ClientProfile = () => {
                         </div>
                         <div className="form-control flex items-center gap-2">
                           <label className="label">
-                            <span className="label-text">Nombre Comercial</span>
+                            <span className="label-text">Nombre Comercial:</span>
                           </label>
                           {isEditing ? (
                             <input
@@ -302,20 +340,20 @@ const ClientProfile = () => {
                         </div>
                         <div className="form-control flex items-center gap-2">
                           <label className="label">
-                            <span className="label-text">CUIT</span>
+                            <span className="label-text">CUIT:</span>
                           </label>
                           <p className="py-2">{companyData.cuit}</p>
                         </div>
                         <div className="form-control flex items-center gap-2">
                           <label className="label">
-                            <span className="label-text">Rubro</span>
+                            <span className="label-text">Rubro:</span>
                           </label>
                           <p className="py-2">{companyData.industry}</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="divider"></div>
+                    <div className="divider divider-accent"></div>
 
                     <div>
                       <h3 className="font-bold mb-4">Contacto</h3>
@@ -324,7 +362,7 @@ const ClientProfile = () => {
                           <label className="label">
                             <span className="label-text flex items-center gap-2">
                               <Phone className="w-4 h-4" />
-                              Teléfono
+                              Teléfono:
                             </span>
                           </label>
                           {isEditing ? (
@@ -341,7 +379,7 @@ const ClientProfile = () => {
                           <label className="label">
                             <span className="label-text flex items-center gap-2">
                               <Mail className="w-4 h-4" />
-                              Email
+                              Email:
                             </span>
                           </label>
                           {isEditing ? (
@@ -358,7 +396,7 @@ const ClientProfile = () => {
                           <label className="label">
                             <span className="label-text flex items-center gap-2">
                               <Globe className="w-4 h-4" />
-                              Sitio Web
+                              Sitio Web:
                             </span>
                           </label>
                           {isEditing ? (
@@ -379,7 +417,7 @@ const ClientProfile = () => {
                       </div>
                     </div>
 
-                    <div className="divider"></div>
+                    <div className="divider divider-accent"></div>
 
                     <div>
                       <h3 className="font-bold mb-4">Dirección</h3>
@@ -623,7 +661,8 @@ const ClientProfile = () => {
                         K
                       </span>
                     </div>
-                    <div className="divider my-2"></div>
+                    <div className="divider divider-accent my-2"></div>
+                    
                     <div className="flex justify-between items-center">
                       <span className="text-sm opacity-70">
                         Límite Disponible
