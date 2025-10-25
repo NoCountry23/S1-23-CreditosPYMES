@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Controller,
   FieldError,
   FieldErrorsImpl,
   Merge,
@@ -7,8 +8,20 @@ import {
 } from "react-hook-form";
 import { FormDataSignUp } from "./SignUpForm";
 
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { CountryData } from "@/app/types/phone";
+
+
+// interface CountryData {
+//   dialCode: string;
+//   countryCode: string;
+//   name: string;
+// }
+
 export default function SecondStep() {
   const {
+    control,
     register,
     formState: { errors },
   } = useFormContext();
@@ -16,6 +29,25 @@ export default function SecondStep() {
     FieldError,
     FieldErrorsImpl<FormDataSignUp["company"]>
   >;
+
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handlePhoneChange = (value: string, country: object, field: any) => {
+    const countryData = country as CountryData;
+
+    if (countryData?.dialCode && value.length > countryData.dialCode.length) {
+      const phoneNumber = value.slice(countryData.dialCode.length);
+      const finalValue = `+${countryData.dialCode}-${phoneNumber}`;
+
+      // Solo este console.log para verificar
+      console.log("Teléfono formateado:", finalValue);
+
+      field.onChange(finalValue);
+    } else {
+      field.onChange(value);
+    }
+  };
+
   return (
     <div className="space-y-5">
       <h2 className="text-2xl font-bold  mb-6">Datos de la Empresa</h2>
@@ -30,9 +62,8 @@ export default function SecondStep() {
             required: "La razón social es requerida",
             minLength: { value: 3, message: "Mínimo 3 caracteres" },
           })}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            companyErrors?.companyName ? "border-red-500" : "border-gray-500"
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${companyErrors?.companyName ? "border-red-500" : "border-gray-500"
+            }`}
           placeholder="Mi Empresa S.R.L."
         />
         {companyErrors?.companyName && (
@@ -66,9 +97,8 @@ export default function SecondStep() {
                 message: "Formato: XX-XXXXXXXX-X",
               },
             })}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              companyErrors?.cuit ? "border-red-500" : "border-gray-500"
-            }`}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${companyErrors?.cuit ? "border-red-500" : "border-gray-500"
+              }`}
             placeholder="30-12345678-9"
           />
           {companyErrors?.cuit && (
@@ -86,9 +116,8 @@ export default function SecondStep() {
             {...register("company.industry", {
               required: "Selecciona un rubro",
             })}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              companyErrors?.industry ? "border-red-500" : "border-gray-500"
-            }`}
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${companyErrors?.industry ? "border-red-500" : "border-gray-500"
+              }`}
           >
             <option value="">Seleccionar...</option>
             <option value="comercio">Comercio</option>
@@ -121,11 +150,10 @@ export default function SecondStep() {
             min: { value: 0, message: "Debe ser un número positivo" },
             max: { value: 100, message: "Valor no válido" },
           })}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            companyErrors?.yearsInBusiness
-              ? "border-red-500"
-              : "border-gray-500"
-          }`}
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${companyErrors?.yearsInBusiness
+            ? "border-red-500"
+            : "border-gray-500"
+            }`}
           placeholder="5"
         />
         {companyErrors?.yearsInBusiness && (
@@ -135,6 +163,70 @@ export default function SecondStep() {
         )}
       </div>
 
+      {/* Campo de Teléfono */}
+      <div className="w-full">
+        <label className="block text-sm font-medium mb-2">
+          Teléfono de Contacto *
+        </label>
+        <Controller
+          name="company.phone"
+          control={control}
+          rules={{
+            required: "El teléfono es requerido",
+            validate: (value) => {
+              if (!value) return true;
+              const phoneRegex = /^\+\d{1,4}-\d{6,14}$/;
+              return phoneRegex.test(value) || "Formato de teléfono inválido";
+            }
+          }}
+          render={({ field }) => (
+            <div className={`
+        relative border border-gray-500/50 rounded-lg
+        focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent
+        ${companyErrors?.phone ? 'border-red-500' : ''}
+        transition-all duration-200
+      `}>
+              <PhoneInput
+                country="ar"
+                onlyCountries={['ar', 'br', 'cl', 'uy', 'py', 'bo', 'pe', 'ec', 'co', 've', 'mx', 'es', 'us']}
+                preferredCountries={['ar', 'br', 'cl', 'uy']}
+                enableSearch={true}
+                countryCodeEditable={false}
+                searchPlaceholder="Buscar país..."
+                placeholder="11 1234-5678"
+                value={field.value ? field.value.replace('+', '').replace('-', '') : ''}
+                onChange={(value, country) => handlePhoneChange(value, country, field)}
+                inputStyle={{
+                  width: '100%',
+                  padding: '24px 16px 24px 60px',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  lineHeight: '1.5',
+                  backgroundColor: 'transparent',
+                  outline: 'none',
+                }}
+                buttonStyle={{
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  padding: '0 12px',
+                  height: '100%',
+                }}
+                containerStyle={{
+                  border: 'none',
+                }}
+              />
+            </div>
+          )}
+        />
+        {companyErrors?.phone && (
+          <p className="mt-1 text-sm text-red-600">
+            {companyErrors.phone.message}
+          </p>
+        )}
+      </div>
+
+      {/* Campo Sitio Web */}
       <div>
         <label className="block text-sm font-medium  mb-2">Sitio Web</label>
         <input
