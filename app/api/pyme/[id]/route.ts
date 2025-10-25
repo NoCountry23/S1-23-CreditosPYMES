@@ -121,3 +121,6 @@ export async function DELETE({ params }: { params: { id: string } }) {
     );
   }
 }
+
+
+// TODO: retornar la pyme recibiendo la user_id
