@@ -1,109 +1,84 @@
 import { NextRequest, NextResponse } from "next/server";
 import ai from "@/services/gemini";
-
+import { createClient } from "@/lib/supabase/server";
+async function getDocumentsBase64(documents: Array<{ storage_path: string; file_type: string, document_type: string }>) {
+  const supabase = await createClient();
+  const results: Array<{ base64: string; mimeType: string, document_type: string }> = [];
+  for (const doc of documents) {
+    const { data, error } = await supabase.storage
+      .from("support-documents")
+      .download(doc.storage_path);
+    if (error) {
+      console.error("Error descargando", doc.storage_path, error.message);
+      continue;
+    }
+    // Convertir a base64
+    const buffer = Buffer.from(await data.arrayBuffer());
+    const base64 = buffer.toString("base64");
+    results.push({
+      base64,
+      mimeType: doc.file_type, // ej: "application/pdf" o "image/png"
+      document_type: doc.document_type
+    });
+  }
+  return results;
+}
 export async function POST(req: NextRequest) {
-  // deberia recibir el id del prestamo y pedir los demas datos a supabase con ese id > generar respuesta de gemini > crear nuevo registro en tabla "sugerencia_ia" vinculada a prestamo
   try {
-    const formData = await req.formData();
-    const balance = formData.get("balance") as File | null;
-    const resultsStatus = formData.get("resultsStatus") as File | null;
-    const amount = formData.get("amount");
-    const months = formData.get("months");
-    if (!balance || !resultsStatus) {
+    const supabase = await createClient();
+    const { pyme_id, prestamo_id } = await req.json();
+    if (!pyme_id || !prestamo_id) {
       return NextResponse.json({ error: "Faltan datos" }, { status: 400 });
     }
-    // reemplazar por documentos reales
-    // Convertir a base64
-    const bufferBalance = Buffer.from(await balance.arrayBuffer());
-    const base64DataBalance = bufferBalance.toString("base64");
-
-    const bufferResultsStatus = Buffer.from(await resultsStatus.arrayBuffer());
-    const base64DataResultsStatus = bufferResultsStatus.toString("base64");
-
-    // reemplazar por datos reales del cliente
-    const loansPrevious: [] | object[] = [
-      {
-        amount: "$1.200.000",
-        date: "2023-05-10",
-        quotes: 12,
-        quotesPaid: 6,
-        quotesAmount: "$100.000",
-        quotesUnpaid: 6,
-      },
-      {
-        amount: "$2.500.000",
-        date: "2022-11-20",
-        quotes: 24,
-        quotesPaid: 12,
-        quotesAmount: "$104.167",
-        quotesUnpaid: 12,
-      },
-      {
-        amount: "$800.000",
-        date: "2021-07-01",
-        quotes: 36,
-        quotesPaid: 30,
-        quotesAmount: "$22.222",
-        quotesUnpaid: 6,
-      },
-      {
-        amount: "$5.000.000",
-        date: "2024-02-15",
-        quotes: 60,
-        quotesPaid: 10,
-        quotesAmount: "$83.333",
-        quotesUnpaid: 50,
-      },
-    ];
+    const {data: documents, error: documentsError} = await supabase.from("support_documents").select("*").eq("pyme_id", pyme_id).in("document_type", ["balance", "resultsStatus"]);
+    const docsBase64 = await getDocumentsBase64(documents as Array<{ storage_path: string; file_type: string; document_type: string }>);
+    if (documentsError) {
+      throw new Error(documentsError.message);
+    }
+    const {data: prestamo, error: prestamosError} = await supabase.from("prestamos").select("*").eq("id", prestamo_id  ).single();
+    if (prestamosError) {
+      throw new Error(prestamosError.message);
+    }
     // Enviar a Gemini
-
     const result = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: [
         {
           parts: [
             {
-              text: `analiza el nivel de riesgo para acceder a un prestamo de $${amount} en ${months} meses, analiza bien las tablas para no cometer errores, que la respuesta sea en español y resumida.`,
+              text: `analiza el nivel de riesgo para acceder a un prestamo de $${prestamo.monto} en ${prestamo.term_months} meses, analiza bien las tablas para no cometer errores, que la respuesta sea en español y resumida.`,
             },
             {
-              text: 'debes responder solo con esta estructura: "{ "risk_level": "alto" | "medio" | "bajo", "explanation": string(Markdown), "should_approve": string }". no uses fences de json. ',
+              text: "debes responder solo con esta estructura: \"{ \"risk_level\": \"alto\" | \"medio\" | \"bajo\", \"explanation\": string(Markdown), \"should_approve\": string }\". no uses fences de json. ",
             },
             {
               text: "verifica que los documentos correspondan a los ultimos 5 años, si no es asi, indica un riesgo alto, no recomendable y explica el motivo.",
             },
-
-            {
-              text:
-                loansPrevious.length > 0
-                  ? `debes tener en cuenta, ademas de los documentos, que este cliente ya tiene prestamos activos, con estos datos: ${JSON.stringify(
-                      loansPrevious,
-                    )}`
-                  : "este cliente no tiene prestamos activos con nosotros.",
-            },
-            // agregar los documentos que faltan en nuevo objeto con inlineData
-            {
-              inlineData: {
-                mimeType: balance.type, // ej: "image/png" o "application/pdf"
-                data: base64DataBalance,
-              },
-            },
-            {
-              inlineData: {
-                mimeType: resultsStatus.type, // ej: "image/png" o "application/pdf"
-                data: base64DataResultsStatus,
-              },
-            },
-          ],
+            ...docsBase64?.flatMap((document) => {
+              return [
+                {text: `documento: ${document.document_type}`},
+                {inlineData: {
+                  mimeType: document.mimeType, // ej: "image/png" o "application/pdf"
+                  data: document.base64,
+                },}
+              ];
+            })
+          ]
         },
       ],
     });
-    // crear nuevo registro en "sugerencia_ia" con el id del prestamo y la respuesta de gemini
+    // // crear nuevo registro en "sugerencia_ia" con el id del prestamo y la respuesta de gemini
+    const {data: sugerencia, error: sugerenciaError} = await supabase.from("sugerencia_ia").insert( {
+      risk_level: JSON.parse(result.text as string).risk_level,
+      explanation: JSON.parse(result.text as string).explanation,
+      should_approve: JSON.parse(result.text as string).should_approve,
+      prestamo_id
+    }).select().single();
+    if (sugerenciaError) {
+      throw new Error(sugerenciaError.message);
+    }
     return NextResponse.json({
-      respuesta: {
-        risk_level: JSON.parse(result.text as string).risk_level,
-        explanation: JSON.parse(result.text as string).explanation,
-        should_approve: JSON.parse(result.text as string).should_approve,
-      },
+      sugerencia
     });
   } catch (err) {
     console.error("Error procesando documento:", err);

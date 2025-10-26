@@ -96,27 +96,27 @@ export default function FourthStep({
           </div>
         </div>
 
-        {/* Estados Contables */}
+        {/* Estado de resultados */}
         <div className='border-2 border-dashed border-gray-500/50 rounded-lg p-6 hover:border-blue-500 transition-all'>
           <div className='flex items-start gap-4'>
             <div className='w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0'>
               <FileText className='w-6 h-6 text-purple-600' />
             </div>
             <div className='flex-1'>
-              <h3 className='font-semibold  mb-1'>Estados Contables</h3>
+              <h3 className='font-semibold  mb-1'>Estado de resultados</h3>
               <p className='text-sm text-gray-600 mb-3'>
-                Últimos 2 años de balances o estados contables
+                Estado de resultados de la empresa actualizada
               </p>
               <input
                 type='file'
                 accept='.pdf,.jpg,.jpeg,.png'
                 onChange={(e) =>
                   e.target.files &&
-                  handleFileUpload("statements", e.target.files[0])
+                  handleFileUpload("resultsStatus", e.target.files[0])
                 }
                 className='block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100'
               />
-              {uploadedFiles.statements && (
+              {uploadedFiles.resultsStatus && (
                 <div className='mt-2 flex items-center gap-2 text-sm text-green-600'>
                   <CheckCircle className='w-4 h-4' />
                   archivo cargado
@@ -126,27 +126,27 @@ export default function FourthStep({
           </div>
         </div>
 
-        {/* Resúmenes Bancarios */}
+        {/* Balance */}
         <div className='border-2 border-dashed border-gray-500/50 rounded-lg p-6 hover:border-blue-500 transition-all'>
           <div className='flex items-start gap-4'>
             <div className='w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0'>
               <FileText className='w-6 h-6 text-orange-600' />
             </div>
             <div className='flex-1'>
-              <h3 className='font-semibold  mb-1'>Resúmenes Bancarios</h3>
+              <h3 className='font-semibold  mb-1'>Balance</h3>
               <p className='text-sm text-gray-600 mb-3'>
-                Últimos 6 meses de movimientos bancarios
+                Balance de la empresa actualizada
               </p>
               <input
                 type='file'
                 accept='.pdf,.jpg,.jpeg,.png'
                 onChange={(e) =>
                   e.target.files &&
-                  handleFileUpload("bankStatements", e.target.files[0])
+                  handleFileUpload("balance", e.target.files[0])
                 }
                 className='block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100'
               />
-              {uploadedFiles.bankStatements && (
+              {uploadedFiles.balance && (
                 <div className='mt-2 flex items-center gap-2 text-sm text-green-600'>
                   <CheckCircle className='w-4 h-4' />
                   archivo cargado
