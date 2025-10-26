@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { usePyme } from "@/hooks/usePyme"; 
+import { usePyme } from "@/hooks/usePyme";
+import { useUser } from "@/hooks/useUser";
 import {
   Building2,
   Mail,
@@ -25,40 +26,49 @@ const ClientProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const { pyme, loading } = usePyme();
+  const { data: user, isLoading: loadingUser } = useUser();
+
+  const contactUser = loadingUser
+    ? { nombre: "---", apellido: "---", email: "---", role: "---" }
+    : {
+      nombre: user!.nombre,
+      apellido: user!.apellido,
+      email: user!.email,
+      role: user!.role,
+    };
 
   /* ----------  Mientras llega la data  ---------- */
-  /* 1️⃣  Mientras llega: mostramos guiones */
   const companyData = loading
     ? {
-        legalName: "---",
-        tradeName: "---",
-        cuit: "---",
-        industry: "---",
-        address: "---",
-        city: "---",
-        province: "---",
-        phone: "---",
-        email: "---",
-        website: "---",
-        yearsInBusiness: "-",
-        employees: "-",
-        annualRevenue: 0,
-      }
+      legalName: "Empresa",
+      tradeName: "---",
+      cuit: "00-00000000-0",
+      industry: "---",
+      address: "---",
+      city: "---",
+      province: "---",
+      phone: "---",
+      email: "---",
+      website: "---",
+      yearsInBusiness: "0",
+      employees: "0",
+      annualRevenue: 0,
+    }
     : {
-        legalName: pyme!.company_name,
-        tradeName: pyme!.company_name,
-        cuit: pyme!.cuil_cuit,
-        industry: pyme!.industry,
-        address: `${pyme!.legal_address}, ${pyme!.city}, ${pyme!.local_state}`,
-        city: pyme!.city,
-        province: pyme!.local_state,
-        phone: pyme!.phone,
-        email: pyme!.email,
-        website: pyme!.company_name.toLowerCase().replace(/\s/g, ""),
-        yearsInBusiness: pyme!.merch_years,
-        employees: pyme!.amount_employees,
-        annualRevenue: pyme!.annual_billing_estimated,
-      };
+      legalName: pyme!.company_name,
+      tradeName: pyme!.company_name,
+      cuit: pyme!.cuil_cuit,
+      industry: pyme!.industry,
+      address: `${pyme!.legal_address}, ${pyme!.city}, ${pyme!.local_state}`,
+      city: pyme!.city,
+      province: pyme!.local_state,
+      phone: pyme!.phone,
+      email: pyme!.email,
+      website: pyme!.company_name.toLowerCase().replace(/\s/g, ""),
+      yearsInBusiness: pyme!.merch_years,
+      employees: pyme!.amount_employees,
+      annualRevenue: pyme!.annual_billing_estimated,
+    };
 
 
   // const companyData = {
@@ -231,41 +241,37 @@ const ClientProfile = () => {
             {/* Tabs */}
             <div className=" mb-6 space-x-4 p-2 ">
               <a
-                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${
-                  activeTab === "company"
+                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "company"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent  hover:text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("company")}
               >
                 Datos de la Empresa
               </a>
               <a
-                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${
-                  activeTab === "contacts"
+                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "contacts"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent  hover:text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("contacts")}
               >
                 Contactos
               </a>
               <a
-                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${
-                  activeTab === "documents"
+                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "documents"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent  hover:text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("documents")}
               >
                 Documentos
               </a>
               <a
-                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${
-                  activeTab === "loans"
+                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "loans"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent  hover:text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("loans")}
               >
                 Préstamos
@@ -466,22 +472,22 @@ const ClientProfile = () => {
                     </h2>
                     <div className="grid md:grid-cols-2 gap-4 mt-4">
                       <div>
-                        <p className="text-sm opacity-80">Nombre</p>
-                        <p className="font-semibold">Carlos López</p>
+                        <p className="text-sm opacity-80">Nombre:</p>
+                        <p className="font-semibold">{contactUser.nombre} {contactUser.apellido}</p>
                       </div>
                       <div>
-                        <p className="text-sm opacity-80">Cargo</p>
+                        <p className="text-sm opacity-80">Cargo: </p>
                         <p className="font-semibold">Gerente General</p>
                       </div>
                       <div>
-                        <p className="text-sm opacity-80">Email</p>
+                        <p className="text-sm opacity-80">Email:</p>
                         <p className="font-semibold">
-                          carlos.lopez@comerciallopez.com
+                          {contactUser.email}
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm opacity-80">Teléfono</p>
-                        <p className="font-semibold">+54 11 5555-1234</p>
+                        <p className="text-sm opacity-80">Teléfono:</p>
+                        <p className="font-semibold">{companyData.phone}</p>
                       </div>
                     </div>
                   </div>
@@ -584,11 +590,10 @@ const ClientProfile = () => {
                             <div className="flex items-center  gap-3">
                               <h3 className="font-bold">{loan.id}</h3>
                               <div
-                                className={`badge ${
-                                  loan.status === "active"
+                                className={`badge ${loan.status === "active"
                                     ? "badge-info"
                                     : "badge-success"
-                                }`}
+                                  }`}
                               >
                                 {loan.status === "active"
                                   ? "Activo"
@@ -662,7 +667,7 @@ const ClientProfile = () => {
                       </span>
                     </div>
                     <div className="divider divider-accent my-2"></div>
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="text-sm opacity-70">
                         Límite Disponible
