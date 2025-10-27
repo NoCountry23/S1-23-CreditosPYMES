@@ -102,6 +102,8 @@ export const PymeSchema = z.object({
     .min(1, { message: "La descripción no debe estar vacía." })
     .max(500, { message: "La descripción es demasiado larga." }),
 
+
+
   // --------------------------------------------------------
   // CAMPOS QUE NO SE INSERTAN (Solo para lectura o tipado interno)
   // --------------------------------------------------------

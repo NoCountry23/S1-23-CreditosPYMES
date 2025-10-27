@@ -27,7 +27,7 @@ export const PrestamoSchema = z.object({
 
   // monto (numeric -> number) - Debe ser positivo y con precisión decimal
   monto: z
-    .number({
+    .float64({
       error: "El monto del préstamo es obligatorio.",
     })
     .positive({ message: "El monto debe ser un valor positivo." })
@@ -83,8 +83,12 @@ export const PrestamoSchema = z.object({
   // representante_id (uuid) - Opcional
   representante_id: IdSchema.optional().nullable(),
 
+  monto_final: z.float64().optional().nullable(),
+
+  interes: z.float64().optional().nullable(),
   // id (uuid), submitted_at (timestamptz) -> Ignorados en POST, manejados por DB
 });
+
 
 // Esquema para la actualización (PATCH): todos los campos son opcionales
 export const PrestamoUpdateSchema = PrestamoSchema.partial();
