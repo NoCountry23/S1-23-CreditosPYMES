@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { usePyme } from "@/hooks/usePyme";
+import { useUser } from "@/hooks/useUser";
 import {
   Building2,
   Mail,
@@ -23,21 +25,67 @@ const ClientProfile = () => {
   const [activeTab, setActiveTab] = useState("company");
   const [isEditing, setIsEditing] = useState(false);
 
-  const companyData = {
-    legalName: "Comercial López S.R.L.",
-    tradeName: "López Distribuidora",
-    cuit: "30-12345678-9",
-    industry: "Comercio",
-    address: "Av. Corrientes 1234, Piso 5",
-    city: "Buenos Aires",
-    province: "CABA",
-    phone: "+54 11 4567-8900",
-    email: "contacto@comerciallopez.com",
-    website: "www.comerciallopez.com.ar",
-    yearsInBusiness: 7,
-    employees: 28,
-    annualRevenue: 3500000,
-  };
+  const { pyme, loading } = usePyme();
+  const { data: user, isLoading: loadingUser } = useUser();
+
+  const contactUser = loadingUser
+    ? { nombre: "---", apellido: "---", email: "---", role: "---" }
+    : {
+      nombre: user!.nombre,
+      apellido: user!.apellido,
+      email: user!.email,
+      role: user!.role,
+    };
+
+  /* ----------  Mientras llega la data  ---------- */
+  const companyData = loading
+    ? {
+      legalName: "Empresa",
+      tradeName: "---",
+      cuit: "00-00000000-0",
+      industry: "---",
+      address: "---",
+      city: "---",
+      province: "---",
+      phone: "---",
+      email: "---",
+      website: "---",
+      yearsInBusiness: "0",
+      employees: "0",
+      annualRevenue: 0,
+    }
+    : {
+      legalName: pyme!.company_name,
+      tradeName: pyme!.company_name,
+      cuit: pyme!.cuil_cuit,
+      industry: pyme!.industry,
+      address: `${pyme!.legal_address}, ${pyme!.city}, ${pyme!.local_state}`,
+      city: pyme!.city,
+      province: pyme!.local_state,
+      phone: pyme!.phone,
+      email: pyme!.email,
+      website: pyme!.company_name.toLowerCase().replace(/\s/g, ""),
+      yearsInBusiness: pyme!.merch_years,
+      employees: pyme!.amount_employees,
+      annualRevenue: pyme!.annual_billing_estimated,
+    };
+
+
+  // const companyData = {
+  //   legalName: "Comercial López S.R.L.",
+  //   tradeName: "López Distribuidora",
+  //   cuit: "30-12345678-9",
+  //   industry: "Comercio",
+  //   address: "Av. Corrientes 1234, Piso 5",
+  //   city: "Buenos Aires",
+  //   province: "CABA",
+  //   phone: "+54 11 4567-8900",
+  //   email: "contacto@comerciallopez.com",
+  //   website: "www.comerciallopez.com.ar",
+  //   yearsInBusiness: 7,
+  //   employees: 28,
+  //   annualRevenue: 3500000,
+  // };
 
   const documents = [
     {
@@ -166,7 +214,7 @@ const ClientProfile = () => {
                   </div>
                 </div>
 
-                <div className="divider"></div>
+                <div className="divider divider-accent"></div>
 
                 <div className="alert alert-success">
                   <div className="flex flex-col w-full">
@@ -193,41 +241,37 @@ const ClientProfile = () => {
             {/* Tabs */}
             <div className=" mb-6 space-x-4 p-2 ">
               <a
-                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${
-                  activeTab === "company"
+                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "company"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent  hover:text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("company")}
               >
                 Datos de la Empresa
               </a>
               <a
-                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${
-                  activeTab === "contacts"
+                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "contacts"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent  hover:text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("contacts")}
               >
                 Contactos
               </a>
               <a
-                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${
-                  activeTab === "documents"
+                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "documents"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent  hover:text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("documents")}
               >
                 Documentos
               </a>
               <a
-                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${
-                  activeTab === "loans"
+                className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "loans"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent  hover:text-gray-700"
-                }`}
+                  }`}
                 onClick={() => setActiveTab("loans")}
               >
                 Préstamos
@@ -274,7 +318,7 @@ const ClientProfile = () => {
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="form-control flex items-center gap-2">
                           <label className="label">
-                            <span className="label-text">Razón Social</span>
+                            <span className="label-text">Razón Social:</span>
                           </label>
                           {isEditing ? (
                             <input
@@ -288,7 +332,7 @@ const ClientProfile = () => {
                         </div>
                         <div className="form-control flex items-center gap-2">
                           <label className="label">
-                            <span className="label-text">Nombre Comercial</span>
+                            <span className="label-text">Nombre Comercial:</span>
                           </label>
                           {isEditing ? (
                             <input
@@ -302,20 +346,20 @@ const ClientProfile = () => {
                         </div>
                         <div className="form-control flex items-center gap-2">
                           <label className="label">
-                            <span className="label-text">CUIT</span>
+                            <span className="label-text">CUIT:</span>
                           </label>
                           <p className="py-2">{companyData.cuit}</p>
                         </div>
                         <div className="form-control flex items-center gap-2">
                           <label className="label">
-                            <span className="label-text">Rubro</span>
+                            <span className="label-text">Rubro:</span>
                           </label>
                           <p className="py-2">{companyData.industry}</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="divider"></div>
+                    <div className="divider divider-accent"></div>
 
                     <div>
                       <h3 className="font-bold mb-4">Contacto</h3>
@@ -324,7 +368,7 @@ const ClientProfile = () => {
                           <label className="label">
                             <span className="label-text flex items-center gap-2">
                               <Phone className="w-4 h-4" />
-                              Teléfono
+                              Teléfono:
                             </span>
                           </label>
                           {isEditing ? (
@@ -341,7 +385,7 @@ const ClientProfile = () => {
                           <label className="label">
                             <span className="label-text flex items-center gap-2">
                               <Mail className="w-4 h-4" />
-                              Email
+                              Email:
                             </span>
                           </label>
                           {isEditing ? (
@@ -358,7 +402,7 @@ const ClientProfile = () => {
                           <label className="label">
                             <span className="label-text flex items-center gap-2">
                               <Globe className="w-4 h-4" />
-                              Sitio Web
+                              Sitio Web:
                             </span>
                           </label>
                           {isEditing ? (
@@ -379,7 +423,7 @@ const ClientProfile = () => {
                       </div>
                     </div>
 
-                    <div className="divider"></div>
+                    <div className="divider divider-accent"></div>
 
                     <div>
                       <h3 className="font-bold mb-4">Dirección</h3>
@@ -428,22 +472,22 @@ const ClientProfile = () => {
                     </h2>
                     <div className="grid md:grid-cols-2 gap-4 mt-4">
                       <div>
-                        <p className="text-sm opacity-80">Nombre</p>
-                        <p className="font-semibold">Carlos López</p>
+                        <p className="text-sm opacity-80">Nombre:</p>
+                        <p className="font-semibold">{contactUser.nombre} {contactUser.apellido}</p>
                       </div>
                       <div>
-                        <p className="text-sm opacity-80">Cargo</p>
+                        <p className="text-sm opacity-80">Cargo: </p>
                         <p className="font-semibold">Gerente General</p>
                       </div>
                       <div>
-                        <p className="text-sm opacity-80">Email</p>
+                        <p className="text-sm opacity-80">Email:</p>
                         <p className="font-semibold">
-                          carlos.lopez@comerciallopez.com
+                          {contactUser.email}
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm opacity-80">Teléfono</p>
-                        <p className="font-semibold">+54 11 5555-1234</p>
+                        <p className="text-sm opacity-80">Teléfono:</p>
+                        <p className="font-semibold">{companyData.phone}</p>
                       </div>
                     </div>
                   </div>
@@ -546,11 +590,10 @@ const ClientProfile = () => {
                             <div className="flex items-center  gap-3">
                               <h3 className="font-bold">{loan.id}</h3>
                               <div
-                                className={`badge ${
-                                  loan.status === "active"
+                                className={`badge ${loan.status === "active"
                                     ? "badge-info"
                                     : "badge-success"
-                                }`}
+                                  }`}
                               >
                                 {loan.status === "active"
                                   ? "Activo"
@@ -623,7 +666,8 @@ const ClientProfile = () => {
                         K
                       </span>
                     </div>
-                    <div className="divider my-2"></div>
+                    <div className="divider divider-accent my-2"></div>
+
                     <div className="flex justify-between items-center">
                       <span className="text-sm opacity-70">
                         Límite Disponible
