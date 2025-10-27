@@ -16,6 +16,11 @@ export async function PUT(
   if (authErr || !user)
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
+  // 1.1. ¿Es operador?
+  const role = user.user_metadata?.role;
+  if (role !== "operator")
+    return NextResponse.json({ error: "Rol no autorizado" }, { status: 403 });
+
   // 2. Validar id
   const { id } = await params;
   if (!IdSchema.safeParse(id).success)

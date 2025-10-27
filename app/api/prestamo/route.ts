@@ -46,8 +46,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-
-
 // GET /api/prestamo?status=PENDIENTE → solo pendientes (de todas las pymes).
 // GET /api/prestamo?pyme_id=fbf8000b-413f-4b30-be5b-2fff1f7490bf&status=PENDIENTE
 // GET /api/prestamo → todos (sin filtros).

@@ -169,7 +169,7 @@ export default function DetailedView({
           <div className="p-6 space-y-6">
             {/* Risk Analysis Alert */}
             <div
-              className={`p-4 rounded-lg border border-gray-500/50 dark:bg-base-100`}
+              className="p-4 rounded-lg border border-gray-500/50 dark:bg-base-100"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
