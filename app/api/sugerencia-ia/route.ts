@@ -5,7 +5,7 @@ export async function GET() {
   const supabase = await createClient(); // Todos lo documentos
 
   const { data, error } = await supabase
-    .from("support_documents")
+    .from("sugerencia_ia")
     .select("*");
 
   if (error) {

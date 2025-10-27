@@ -1,23 +1,24 @@
 // hooks/useOperadorAssignedPrestamos.ts
 import { useQuery } from "@tanstack/react-query";
+import {PrestamoAssigned} from "@/app/types/types";
 
-type PrestamoAssigned = {
-  id: string;
-  monto: number;
-  currency: string;
-  term_months: number;
-  purpose: string;
-  status: "PENDIENTE" | "APROBADO" | "RECHAZADO";
-  submitted_at: string;
-  pyme: {
-    id: string;
-    company_name: string;
-    cuil_cuit: string;
-    annual_billing_estimated: number;
-    amount_employees: number;
-    merch_years: number;
-  };
-};
+// type PrestamoAssigned = {
+//   id: string;
+//   monto: number;
+//   currency: string;
+//   term_months: number;
+//   purpose: string;
+//   status: "PENDIENTE" | "APROBADO" | "RECHAZADO";
+//   submitted_at: string;
+//   pyme: {
+//     id: string;
+//     company_name: string;
+//     cuil_cuit: string;
+//     annual_billing_estimated: number;
+//     amount_employees: number;
+//     merch_years: number;
+//   };
+// };
 
 export default function useOperadorAssignedPrestamos() {
   return useQuery<PrestamoAssigned[]>({

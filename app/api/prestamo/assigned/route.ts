@@ -15,14 +15,17 @@ export async function GET() {
   if (role !== "operator")
     return NextResponse.json({ error: "Rol no autorizado" }, { status: 403 });
 
-  // 3. Préstamos asignados al operador, ordenados: PENDIENTE primero
+  // 3. Préstamos + pyme + docs de la pyme + sugerencia IA
   const { data, error } = await supabase
     .from("prestamos")
-    .select("*, pyme(*)")
+    .select(`
+    *,
+    pyme(*, support_documents(*)),
+    sugerencia_ia(*)
+  `)
     .eq("operator_id", user.id)
-    .order("status", { ascending: true })   // PENDIENTE → APROBADO → RECHAZADO
+    .order("status", { ascending: true })
     .order("submitted_at", { ascending: false });
-
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json({ prestamos: data ?? [] }, { status: 200 });
