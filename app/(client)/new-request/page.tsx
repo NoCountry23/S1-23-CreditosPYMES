@@ -48,7 +48,7 @@ export default function NewRequestPage() {
 
   async function createRequest(data: { [p: string]: unknown }) {
 
-    const response = await fetch("/api/prestamos-temp", {
+    const response = await fetch("/api/prestamo", {
       method: "POST",
       body: JSON.stringify(data),
     });

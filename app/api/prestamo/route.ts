@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
   // 3) Insertar en Supabase
   try {
-    const { data, error } = await supabase.from("prestamo").insert(datosValidados).select().single();
+    const { data, error } = await supabase.from("prestamos").insert(datosValidados).select().single();
     if (error) {
       console.error("Supabase Error:", error);
       return NextResponse.json({ error: error.message ?? "Error de base de datos" }, { status: 500 });
@@ -45,8 +45,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Error interno del servidor al insertar el préstamo" }, { status: 500 });
   }
 }
-
-
 
 // GET /api/prestamo?status=PENDIENTE → solo pendientes (de todas las pymes).
 // GET /api/prestamo?pyme_id=fbf8000b-413f-4b30-be5b-2fff1f7490bf&status=PENDIENTE
