@@ -1,4 +1,5 @@
 import {
+  Clock,
   XCircle,
   Building2,
   TrendingUp,
@@ -9,7 +10,7 @@ import {
   Download,
   MessageSquare,
 } from "lucide-react";
-import type { PrestamoAssigned } from "@/app/types/types";
+import type { PrestamoAssigned, TimelineEvent } from "@/app/types/types";
 import { useDecidePrestamo } from "@/hooks/useDecidePrestamo";
 
 // Información detallada del pedido seleccionado
@@ -144,8 +145,42 @@ export default function DetailedView({ prestamo, onClose }: Props) {
     }
   };
 
+  // dentro de DetailedView
+  const buildTimeline = (p: PrestamoAssigned) => {
+    const base: TimelineEvent[] = [
+      {
+        date: p.created_at,
+        event: "Prestamo solicitado",
+        user: "Representente",
+      },
+      {
+        date: p.assigned_at ?? p.created_at,
+        event: "Asignado para evaluación",
+        user: "Operador",
+      },
+    ];
+
+    if (p.decision_at) {
+      base.push({
+        date: p.decision_at,
+        event: p.status === "APROBADO" ? "Solicitud aprobada" : "Solicitud rechazada",
+        user: "Operador",
+      });
+    }
+    else {
+      base.push({
+        date: new Date().toISOString(),
+        event: "Pendiente de decisión",
+        user: "Operador",
+      });
+    }
+
+    return base;
+  };
+
+  const timeline = buildTimeline(prestamo); //luego lo tomamos de un compoente aparte
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 bg-opacity-50 z-50 overflow-y-auto">
       <div className="min-h-screen px-4 py-8">
         <div className="max-w-6xl mx-auto bg-background  rounded-xl shadow-2xl">
           {/* Header */}
@@ -189,7 +224,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                   ? "border-red-300 bg-red-50 text-red-800"
                   : sugerencia.risk_level === "medio"
                     ? "border-yellow-300 bg-yellow-50 text-yellow-800"
-                    : "border-green-300 bg-green-50 text-green-800" }`}>
+                    : "border-green-300 bg-green-50 text-green-800"}`}>
                 <p className="font-semibold">Sugerencia IA: {sugerencia.recommendation}</p>
                 <p className="text-sm mt-1">{sugerencia.explanation}</p>
               </div>
@@ -206,39 +241,39 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                   </h3>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-600">Razón Social</p>
+                      <p className="text-gray-600 dark:text-gray-500">Razón Social</p>
                       <p className="font-medium">
                         {prestamo.pyme.company_name}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Nombre Comercial</p>
+                      <p className="text-gray-600 dark:text-gray-500">Nombre Comercial</p>
                       <p className="font-medium">
                         {prestamo.pyme.company_name}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">CUIT</p>
+                      <p className="text-gray-600 dark:text-gray-500">CUIT</p>
                       <p className="font-medium">{prestamo.pyme.cuil_cuit}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Teléfono</p>
+                      <p className="text-gray-600 dark:text-gray-500">Teléfono</p>
                       <p className="font-medium">{prestamo.pyme.phone ?? "-"}</p>
                     </div>
                     <div className="col-span-2">
-                      <p className="text-gray-600">Dirección</p>
+                      <p className="text-gray-600 dark:text-gray-500">Dirección</p>
                       <p className="font-medium">
                         {prestamo.pyme.address ?? "-"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Email</p>
+                      <p className="text-gray-600 dark:text-gray-500">Email</p>
                       <p className="font-medium text-blue-600">
                         {prestamo.pyme.email ?? "-"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Website</p>
+                      <p className="text-gray-600 dark:text-gray-500">Website</p>
                       <p className="font-medium text-blue-600">
                         {/* {details.companyInfo.website} */}
                       </p>
@@ -254,7 +289,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className=" p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">Facturación Anual</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-500">Facturación Anual</p>
                       <p className="text-2xl font-bold text-green-700">
                         ${prestamo.pyme.annual_billing_estimated.toLocaleString()}
                       </p>
@@ -268,13 +303,13 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                       </p>
                     </div>
                     <div className=" p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">Empleados</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-500">Empleados</p>
                       <p className="text-2xl font-bold text-purple-700">
                         {prestamo.pyme.amount_employees}
                       </p>
                     </div>
                     <div className=" p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-gray-500">
                         Años de Antigüedad
                       </p>
                       <p className="text-2xl font-bold text-orange-700">
@@ -282,7 +317,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Score Crediticio</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-500">Score Crediticio</p>
                       <div className="flex items-center gap-2 mt-1">
                         <div className="flex-1  rounded-full h-2">
                           <div
@@ -300,7 +335,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Estado AFIP</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-500">Estado AFIP</p>
                       <p className="font-medium text-green-600 mt-1">
                         {/* ✓ {details.financialData.taxStatus} */}
                       </p>
@@ -317,7 +352,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-500">
                           Monto Solicitado
                         </p>
                         <p className="text-2xl font-bold text-blue-600">
@@ -325,13 +360,13 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Plazo</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-500">Plazo</p>
                         <p className="text-2xl font-bold">
                           {prestamo.term_months} meses
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-500">
                           Cuota Mensual Estimada
                         </p>
                         <p className="text-xl font-bold">
@@ -339,20 +374,20 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Tasa de Interés</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-500">Tasa de Interés</p>
                         <p className="text-xl font-bold">
                           {/* {details.loanDetails.interestRate}% TNA */}
                         </p>
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Destino</p>
+                      <p className="text-sm text-gray-600 mb-1 dark:text-gray-500">Destino</p>
                       <p className="font-medium">
                         {prestamo.purpose}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">
+                      <p className="text-sm text-gray-600 mb-1 dark:text-gray-500">
                         Descripción del Proyecto
                       </p>
                       <p className="text-sm     p-3 rounded">
@@ -363,39 +398,56 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                 </div>
 
                 {/* Documents */}
-                <div className=" border border-gray-500/50 dark:bg-base-100 rounded-lg p-6">
+                <div className="border border-gray-500/50 dark:bg-base-100 rounded-lg p-6">
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                     <FileText className="w-5 h-5 text-blue-600" />
                     Documentación
                   </h3>
+
                   {docs.length === 0 ? (
-                    <p className="text-sm text-gray-500">Aún no se han cargado documentos.</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Aún no se han cargado documentos.
+                    </p>
                   ) : (
                     <div className="space-y-2">
-                      {docs.map((doc) => (
-                        <div
-                          key={doc.id}
-                          className="flex items-center justify-between p-3  rounded-lg bg-background"
-                        >
-                          <div className="flex items-center gap-3">
-                            <CheckCircle className="w-5 h-5 text-green-600" />
-                            <div>
-                              <p className="font-medium text-sm">{doc.file_name}</p>
-                              <p className="text-xs text-gray-500">
-                                Subido el {doc.document_type} · {new Date(doc.created_at).toLocaleDateString()}
-                              </p>
+                      {docs.map((doc) => {
+                        // Si el path no es una URL absoluta, construir la URL pública de Supabase
+                        const url = doc.storage_path.startsWith("http")
+                          ? doc.storage_path
+                          : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/support-documents/${doc.storage_path}`;
+
+                        return (
+                          <div
+                            key={doc.id}
+                            className="flex items-center justify-between p-3 rounded-lg bg-green-100/50 dark:bg-base-200"
+                          >
+                            <div className="flex items-center gap-3">
+                              <CheckCircle className="w-5 h-5 text-green-600" />
+                              <div>
+                                <p className="font-medium text-sm">{doc.file_name}</p>
+                                <p className="text-xs text-gray-500">
+                                  Subido el {doc.document_type} ·{" "}
+                                  {new Date(doc.created_at).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => window.open(url, "_blank")}
+                                className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                              >
+                                <Eye className="w-4 h-4 text-gray-600 dark:text-gray-500" />
+                              </button>
+                              <button
+                                onClick={() => window.open(url, "_blank")}
+                                className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                              >
+                                <Download className="w-4 h-4 text-gray-600 dark:text-gray-500" />
+                              </button>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
-                              <Eye className="w-4 h-4 text-gray-600" />
-                            </button>
-                            <button className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
-                              <Download className="w-4 h-4 text-gray-600" />
-                            </button>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -438,7 +490,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                   </h3>
                   <div className="space-y-4">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">
+                      <p className="text-sm text-gray-600 mb-1 dark:text-gray-500">
                         Ratio Deuda/Ingreso
                       </p>
                       <div className="flex items-center justify-between">
@@ -461,13 +513,13 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                       </div>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Capacidad de Pago</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-500">Capacidad de Pago</p>
                       <p className="font-bold text-green-600">
                         {/* {details.riskAnalysis.paymentCapacity} */}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Garantías</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-500">Garantías</p>
                       <p className="font-medium text-sm">
                         {/* {details.riskAnalysis.collateral} */}
                       </p>
@@ -476,28 +528,66 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                 </div>
 
                 {/* Timeline */}
-                <div className=" border border-gray-500/50 dark:bg-base-100 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold mb-4">
+                <div className="border border-gray-500/50 bg-white dark:bg-base-100 rounded-box p-6">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-primary" />
                     Línea de Tiempo
                   </h3>
-                  {/* <div className="space-y-4">
-                  {details.timeline.map((item, idx) => (
-                    <div key={idx} className="flex gap-3">
-                      <div className="flex flex-col items-center">
-                        <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                        {idx < details.timeline.length - 1 && (
-                          <div className="w-0.5 h-full bg-gray-300 my-1"></div>
-                        )}
-                      </div>
-                      <div className="flex-1 pb-4">
-                        <p className="text-sm font-medium">{item.event}</p>
-                        <p className="text-xs text-gray-500">{item.date}</p>
-                        <p className="text-xs text-gray-600">{item.user}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div> */}
+
+                  {timeline.length === 0 && (
+                    <p className="text-sm text-base-content/60">Sin eventos registrados.</p>
+                  )}
+
+                  {timeline.length > 0 && (
+                    <ul className="timeline timeline-vertical">
+                      {timeline.map((item, index) => {
+                        const isLast = index === timeline.length - 1;
+                        const isPending = item.event.includes("Pendiente de decisión");
+                        const colorClass = isPending ? "text-gray-400" : "text-green-500";
+                        const hrClass = isPending ? "bg-gray-300" : "bg-green-300";
+                        const alignmentClass = index % 2 === 0 ? "timeline-start" : "timeline-end";
+
+                        return (
+                          <li key={index}>
+                            {index > 0 && <hr className={hrClass} />}
+
+                            <div className={`${alignmentClass} timeline-box bg-green-100/50 dark:bg-base-200 border-none`} >
+                              <p className="font-semibold text-[11px]">{item.event}</p>
+                              <p className="text-[9px] opacity-70">
+                                {item.date
+                                  ? new Date(item.date).toLocaleString("es-AR", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                  })
+                                  : ""}
+                              </p>
+                            </div>
+
+                            <div className="timeline-middle">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                className={`${colorClass} h-5 w-5`}
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </div>
+
+                            {!isLast && <hr className={hrClass} />}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </div>
+
               </div>
             </div>
           </div>

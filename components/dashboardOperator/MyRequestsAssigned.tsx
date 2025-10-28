@@ -84,7 +84,7 @@ export default function MyRequestsAssigned() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
-                    Asignada el {new Date(p.submitted_at).toLocaleDateString()}
+                    Asignada el {new Date(p.assigned_at).toLocaleDateString()}
                   </div>
                 </div>
               </div>

@@ -126,5 +126,4 @@ export async function DELETE({ params }: { params: { id: string } }) {
   }
 }
 
-
 // TODO: Retorne el presatamo tomando el id de la pyme

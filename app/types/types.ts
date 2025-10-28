@@ -6,7 +6,9 @@ export type PrestamoAssigned = {
     term_months: number;
     purpose: string;
     status: "PENDIENTE" | "APROBADO" | "RECHAZADO";
-    submitted_at: string;
+    assigned_at: string;
+    created_at: string;
+    decision_at?: string;
     pyme: {
         id: string;
         company_name: string;
@@ -40,3 +42,9 @@ export type SugerenciaIA = {
     recommendation: "APROBAR" | "RECHAZAR" | "OBSERVAR";
     explanation: string;
 };
+
+export type TimelineEvent = {
+    date: string; // ISO
+    event: string;
+    user: string;
+  };

@@ -25,7 +25,7 @@ export async function GET() {
   `)
     .eq("operator_id", user.id)
     .order("status", { ascending: true })
-    .order("submitted_at", { ascending: false });
+    .order("assigned_at", { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json({ prestamos: data ?? [] }, { status: 200 });

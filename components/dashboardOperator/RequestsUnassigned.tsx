@@ -23,7 +23,7 @@ export default function RequestsUnassigned() {
     id: string;
     monto: number;
     purpose: string;
-    submitted_at: string;
+    created_at: string;
     priority: "high" | "medium" | "low";
     daysWaiting: number;
     pyme: Pyme;
@@ -62,9 +62,8 @@ export default function RequestsUnassigned() {
   if (prestamosFlat.length === 0)
     return <div className="alert alert-info">No hay préstamos pendientes sin operador.</div>;
 
-
   const sorted = prestamosFlat.sort((a: Prestamo, b: Prestamo) =>
-    new Date(a.submitted_at).getTime() - new Date(b.submitted_at).getTime()
+    new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
 
   const filtered = sorted.filter((pr: Prestamo) =>
@@ -129,8 +128,7 @@ export default function RequestsUnassigned() {
                         ? "bg-red-100 text-red-800"
                         : priority === "medium"
                           ? "bg-yellow-100 text-yellow-800"
-                          : "bg-green-100 text-green-800"
-                        }`}
+                          : "bg-green-100 text-green-800" }`}
                     >
                       {priority === "high" && <AlertTriangle className="w-3 h-3" />}
                       {priority === "high" ? "Alta" : priority === "medium" ? "Media" : "Baja"}
@@ -164,7 +162,7 @@ export default function RequestsUnassigned() {
 
                   <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
                     <Calendar className="w-4 h-4" />
-                    Solicitado: {new Date(pr.submitted_at).toLocaleDateString("es-AR")} ({days} días)
+                    Solicitado: {new Date(pr.created_at).toLocaleDateString("es-AR")} ({days} días)
                   </div>
                 </div>
 
