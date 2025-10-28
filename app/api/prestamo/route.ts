@@ -6,28 +6,50 @@ import { z } from "zod";
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
 
-  // 1) Parsear JSON
-  let requestBody: unknown;
+  let body: unknown;
   try {
-    requestBody = await request.json();
-  } catch (e) {
-    console.error("Invalid JSON body:", e);
-    return NextResponse.json({ error: "Formato de solicitud JSON inválido." }, { status: 400 });
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  // 2) Validar con Zod
-  const validationResult = PrestamoSchema.safeParse(requestBody);
-  if (!validationResult.success) {
-    return NextResponse.json({ error: "Datos del préstamo inválidos.", details: z.treeifyError(validationResult.error) }, { status: 400 });
+  const parsed = PrestamoSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Datos inválidos", details: parsed.error.format() }, { status: 400 });
   }
 
-  const datosValidados = validationResult.data;
+  const p = parsed.data;
 
-  // 3) Insertar en Supabase
+  // normalizar status (opcional)
+  const status = (p.status ?? "pendiente").toLowerCase(); // "aceptado" -> "aceptado"
+
+  // armamos la fila para la BD
+  const row = {
+    pyme_id: p.pyme_id,
+    monto: p.monto,
+    currency: p.currency ?? "ARS",
+    term_months: p.term_months,
+    cant_cuo: p.cant_cuo,
+    purpose: p.purpose ?? null,
+    status,
+    assigned_at: p.assigned_at ?? null,
+    decision_at: p.decision_at ?? null,
+    rejection_reason: p.rejection_reason ?? null,
+    operator_id: p.operator_id ?? null,
+    representante_id: p.representante_id,
+    monto_final: p.monto_final ?? null,
+    interes: p.interes,                 // ← ya viene decimal (0.45)
+    // created_at / updated_at las maneja la DB con defaults
+  };
+
   try {
-    const { data, error } = await supabase.from("prestamos").insert(datosValidados).select().single();
+    const { data, error } = await supabase
+      .from("prestamos") // <-- usa el nombre real de tu tabla
+      .insert(row)
+      .select()
+      .single();
+
     if (error) {
-      console.error("Supabase Error:", error);
       return NextResponse.json({ error: error.message ?? "Error de base de datos" }, { status: 500 });
     }
 

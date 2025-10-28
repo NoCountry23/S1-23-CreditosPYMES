@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { IdSchema } from "@/schema/IdSchema";
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   const supabase = await createClient();
   const { id } = await params;
 
@@ -125,5 +125,3 @@ export async function DELETE({ params }: { params: { id: string } }) {
     );
   }
 }
-
-// TODO: Retorne el presatamo tomando el id de la pyme
