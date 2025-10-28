@@ -1,7 +1,7 @@
 // schemas/PrestamoSchema.ts
 import { z } from "zod";
 import { IdSchema } from "./IdSchema";
-
+import { normalizeTna } from "@/lib/tna";
 // Lista de monedas permitidas (Regla de Negocio)
 export const CurrencyEnum = z.enum(["ARS", "USD"] as const, {
   error: "Moneda inválida. Debe ser ARS o USD.",
@@ -70,6 +70,7 @@ export const PrestamoSchema = z.object({
   // --------------------------------------------------------
   // CAMPOS OPCIONALES Y DE SÓLO LECTURA (Manejo de Fechas y IDs)
   // --------------------------------------------------------
+  assigned_at: z.string().datetime().nullable().optional(),
 
   // decision_at (timestamptz) - Fecha de decisión, opcional en la creación
   decision_at: z.coerce.date().optional().nullable(),
@@ -85,10 +86,9 @@ export const PrestamoSchema = z.object({
 
   monto_final: z.float64().optional().nullable(),
 
-  interes: z.float64().optional().nullable(),
+  interes: z.union([z.string(), z.number()]).transform(v => normalizeTna(v)).optional().nullable(),
   // id (uuid), submitted_at (timestamptz) -> Ignorados en POST, manejados por DB
 });
-
 
 // Esquema para la actualización (PATCH): todos los campos son opcionales
 export const PrestamoUpdateSchema = PrestamoSchema.partial();

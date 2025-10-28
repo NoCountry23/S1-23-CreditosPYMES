@@ -20,23 +20,21 @@ export const PymeSchema = z.object({
     .string({
       error: "El CUIL/CUIT es obligatorio.",
     })
-        .trim()
-        .length(13, { message: "El CUIL/CUIT debe tener 13 caracteres, incluyendo guiones (XX-XXXXXXXX-X)." })
-        .regex(/^\d{2}-\d{8}-\d{1}$/, { message: "Formato de CUIL/CUIT inválido. Use el formato XX-XXXXXXXX-X." }),
+    .trim()
+    .length(13, { message: "El CUIL/CUIT debe tener 13 caracteres, incluyendo guiones (XX-XXXXXXXX-X)." })
+    .regex(/^\d{2}-\d{8}-\d{1}$/, { message: "Formato de CUIL/CUIT inválido. Use el formato XX-XXXXXXXX-X." }),
 
+  // address (character varying)
+  address: z.string().trim().min(1, { message: "La dirección no debe estar vacía." }).max(255, { message: "La dirección no puede exceder los 255 caracteres." }),
 
-    // address (character varying)
-    address: z.string().trim().min(1, { message: "La dirección no debe estar vacía." }).max(255, { message: "La dirección no puede exceder los 255 caracteres." }),
+  // email (character varying) - Control de formato estricto
+  email: z.email({ message: "El formato del email es inválido." })
+    .trim()
+    .max(255, { message: "El email no puede exceder los 255 caracteres." }),
 
-    // email (character varying) - Control de formato estricto
-    email: z.email({ message: "El formato del email es inválido." })
-  .trim()
-  .max(255, { message: "El email no puede exceder los 255 caracteres." }),
- 
-
-    // industry (character varying)
-    industry: z.string().trim().min (1, { message: "El sector no debe estar vacío." }).max(100, { message: "El sector no puede exceder los 100 caracteres." }),
-    phone: z.string().trim().min(1, { message: "El teléfono no debe estar vacío." }).max(100, { message: "El teléfono no puede exceder los 100 caracteres." }),
+  // industry (character varying)
+  industry: z.string().trim().min(1, { message: "El sector no debe estar vacío." }).max(100, { message: "El sector no puede exceder los 100 caracteres." }),
+  phone: z.string().trim().min(1, { message: "El teléfono no debe estar vacío." }).max(100, { message: "El teléfono no puede exceder los 100 caracteres." }),
 
   // annual_billing_estimated (double precision) - Control de valor
   annual_billing_estimated: z
@@ -101,8 +99,6 @@ export const PymeSchema = z.object({
     .trim()
     .min(1, { message: "La descripción no debe estar vacía." })
     .max(500, { message: "La descripción es demasiado larga." }),
-
-
 
   // --------------------------------------------------------
   // CAMPOS QUE NO SE INSERTAN (Solo para lectura o tipado interno)
