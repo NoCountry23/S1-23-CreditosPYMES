@@ -7,7 +7,7 @@ async function getDocumentsBase64(documents: Array<{ storage_path: string; file_
   for (const doc of documents) {
     const { data, error } = await supabase.storage
       .from("support-documents")
-      .download(doc.storage_path);
+      .download(doc.storage_path.split("support-documents/")[1]);
     if (error) {
       console.error("Error descargando", doc.storage_path, error.message);
       continue;
@@ -31,13 +31,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Faltan datos" }, { status: 400 });
     }
     const {data: documents, error: documentsError} = await supabase.from("support_documents").select("*").eq("pyme_id", pyme_id).in("document_type", ["balance", "resultsStatus"]);
-    const docsBase64 = await getDocumentsBase64(documents as Array<{ storage_path: string; file_type: string; document_type: string }>);
     if (documentsError) {
       throw new Error(documentsError.message);
     }
+    const docsBase64 = await getDocumentsBase64(documents as Array<{ storage_path: string; file_type: string; document_type: string }>);
     const {data: prestamo, error: prestamosError} = await supabase.from("prestamos").select("*").eq("id", prestamo_id  ).single();
     if (prestamosError) {
       throw new Error(prestamosError.message);
+    }
+
+    const {data: activeLoans, error: activeLoansError} = await supabase.from("prestamos").select("*").eq("pyme_id", pyme_id).eq("status", "PENDIENTE").neq("id", prestamo_id);
+    if (activeLoansError) {
+      throw new Error(activeLoansError.message);
     }
     // Enviar a Gemini
     const result = await ai.models.generateContent({
@@ -46,13 +51,22 @@ export async function POST(req: NextRequest) {
         {
           parts: [
             {
-              text: `analiza el nivel de riesgo para acceder a un prestamo de $${prestamo.monto} en ${prestamo.term_months} meses, analiza bien las tablas para no cometer errores, que la respuesta sea en español y resumida.`,
+              text: `La fecha de hoy es ${new Date().toISOString().split("T")[0]}.`,
+            },
+            {
+              text: `analiza el nivel de riesgo para acceder a un prestamo de $${prestamo.monto} en ${prestamo.term_months} meses.`,
             },
             {
               text: "debes responder solo con esta estructura: \"{ \"risk_level\": \"alto\" | \"medio\" | \"bajo\", \"explanation\": string(Markdown), \"should_approve\": string }\". no uses fences de json. ",
             },
             {
               text: "verifica que los documentos correspondan a los ultimos 5 años, si no es asi, indica un riesgo alto, no recomendable y explica el motivo.",
+            },
+            {
+              text: activeLoans?.length ? `Este cliente tiene prestamos activos: ${JSON.stringify(activeLoans)}` : "Actualmente no tiene prestamos activos en la plataforma.",
+            },
+            {
+              text:"analiza bien los documentos para no cometer errores, que la respuesta sea en español y resumida."
             },
             ...docsBase64?.flatMap((document) => {
               return [
