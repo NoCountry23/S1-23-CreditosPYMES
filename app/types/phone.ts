@@ -3,4 +3,3 @@ export interface CountryData {
     dialCode: string;
     countryCode: string;
   }
-  

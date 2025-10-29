@@ -12,7 +12,7 @@ export async function GET() {
       .select("*")
       .eq("status", "PENDIENTE")
       .is("operator_id", null)
-      .order("submitted_at", { ascending: true }); // ↑ más antiguo primero
+      .order("assigned_at", { ascending: true }); // ↑ más antiguo primero
 
     if (prestamosError) return NextResponse.json({ error: prestamosError.message }, { status: 500 });
     if (!prestamos || prestamos.length === 0) return NextResponse.json([], { status: 200 });
@@ -21,7 +21,7 @@ export async function GET() {
 
     // 2. Calculamos prioridad y días **por préstamo**
     const prestamosConPrioridad = prestamos.map((pr) => {
-      const days = Math.floor((now.getTime() - new Date(pr.submitted_at).getTime()) / (1000 * 60 * 60 * 24));
+      const days = Math.floor((now.getTime() - new Date(pr.assigned_at).getTime()) / (1000 * 60 * 60 * 24));
       let priority: "low" | "medium" | "high";
       if (days >= 3) priority = "high";
       else if (days === 2) priority = "medium";

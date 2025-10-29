@@ -16,6 +16,11 @@ export async function PUT(
   if (authErr || !user)
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
+  // 1.1. ¿Es operador?
+  const role = user.user_metadata?.role;
+  if (role !== "operator")
+    return NextResponse.json({ error: "Rol no autorizado" }, { status: 403 });
+
   // 2. Validar id
   const { id } = await params;
   if (!IdSchema.safeParse(id).success)
@@ -24,7 +29,10 @@ export async function PUT(
   // 3. Intentar asignar solo si está libre
   const { data: updated, error } = await supabase
     .from("prestamos")
-    .update({ operator_id: user.id })
+    .update({
+      operator_id: user.id,
+      assigned_at: new Date().toISOString(), // 🕒 fecha y hora actual
+    })
     .eq("id", id)
     .eq("status", "PENDIENTE")
     .is("operator_id", null)
@@ -39,3 +47,5 @@ export async function PUT(
 
   return NextResponse.json({ prestamo: updated }, { status: 200 });
 }
+
+//assigned_at: date-time 

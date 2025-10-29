@@ -6,10 +6,10 @@ export async function POST(request: NextRequest) {
 
   if (!email || !password) {
     return NextResponse.json(
-        {error: 'Campos requeridos'},
-        {status: 400}
+      { error: "Campos requeridos" },
+      { status: 400 }
     );
-}
+  }
 
   const supabase = await createClient();
 
@@ -21,13 +21,13 @@ export async function POST(request: NextRequest) {
   return error
     ? NextResponse.json({ error: error.message }, { status: 400 })
     : NextResponse.json({
-        success: true,
-        user: {
-          id: data.user.id,
-          email: data.user.email,
-          role: data.user.user_metadata?.role,
-          nombre: data.user.user_metadata?.nombre,
-          apellido: data.user.user_metadata?.apellido,
-        },
-      });
+      success: true,
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+        role: data.user.user_metadata?.role,
+        nombre: data.user.user_metadata?.nombre,
+        apellido: data.user.user_metadata?.apellido,
+      },
+    });
 }
