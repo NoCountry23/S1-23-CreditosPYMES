@@ -20,11 +20,12 @@ export function buildInstallments(params: {
     principal: number; // prestamos.monto
     tna: number;       // prestamos.interes (0.45)
     n: number;         // prestamos.cant_cuo
+    interest: number;
     confirmedAt: Date;
     firstDueDate?: Date; // opcional
 }) {
-  const { principal, tna, n, confirmedAt, firstDueDate } = params;
-  const rate = tna / 12;
+  const { principal, tna, n, interest, confirmedAt, firstDueDate } = params;
+  // const rate = tna / 12;
   const payment = calculateMonthlyPayment(principal, tna, n);
 
   let balance = principal;
@@ -40,7 +41,6 @@ export function buildInstallments(params: {
     }> = [];
 
   for (let k = 1; k <= n; k++) {
-    const interest = balance * rate;
     const capital = payment - interest;
     const isLast = k === n;
     const principalAdj = isLast ? balance : capital;

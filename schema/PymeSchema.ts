@@ -100,7 +100,7 @@ export const PymeSchema = z.object({
     .min(1, { message: "La descripción no debe estar vacía." })
     .max(500, { message: "La descripción es demasiado larga." }),
 
-  url_pyme: z.string().trim().min(1, { message: "La URL de la Pyme no debe estar vacía." }).max(255, { message: "La URL de la Pyme no puede exceder los 255 caracteres." }),
+  url_pyme: z.string().trim().min(1, { message: "La URL de la Pyme no debe estar vacía." }).max(255, { message: "La URL de la Pyme no puede exceder los 255 caracteres." }).optional(),
   // --------------------------------------------------------
   // CAMPOS QUE NO SE INSERTAN (Solo para lectura o tipado interno)
   // --------------------------------------------------------

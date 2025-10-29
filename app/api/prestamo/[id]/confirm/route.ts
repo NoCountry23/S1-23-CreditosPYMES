@@ -36,6 +36,7 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     principal: Number(loan.monto),
     tna: Number(loan.interes),          // ya normalizado a decimal (0.45)
     n: Number(loan.cant_cuo),           // cantidad de cuotas
+    interest: Number(loan.interes),
     confirmedAt
   });
 
@@ -43,7 +44,7 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
   const montoFinal = Number(
     cuotas.reduce((acc, c) => acc + Number(c.amount), 0).toFixed(2)
   );
- 
+
   // 4) UPSERT de cuotas (idempotente)
   const payload = cuotas.map(c => ({
     prestamo_id: loan.id,

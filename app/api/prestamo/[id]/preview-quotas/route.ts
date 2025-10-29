@@ -23,6 +23,7 @@ export async function GET(
     principal: Number(loan.monto),
     tna: Number(loan.interes), // 0.45
     n: Number(loan.cant_cuo),
+    interest: Number(loan.interes),
     confirmedAt: new Date()
   });
 
