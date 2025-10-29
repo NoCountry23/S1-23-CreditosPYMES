@@ -1,77 +1,3 @@
-// import { NextResponse } from "next/server";
-// import { createClient } from "@/lib/supabase/server";
-// import { buildInstallments } from "@/lib/schedule";
-
-// export async function POST(
-//   _req: Request,
-//   { params }: { params: { id: string } }
-// ) {
-//   const supabase = await createClient();
-//   const { id } = params;
-
-//   // 1) Leer préstamo
-//   const { data: loan, error: loanErr } = await supabase
-//     .from("prestamos")
-//     .select("id, monto, interes, cant_cuo, status")
-//     .eq("id", id)
-//     .single();
-
-//   if (loanErr || !loan) {
-//     return NextResponse.json({ error: loanErr?.message ?? "Loan not found" }, { status: 404 });
-//   }
-//   if (loan.status === "confirmado") {
-//     return NextResponse.json({ error: "Already confirmed" }, { status: 409 });
-//   }
-
-//   // 2) Generar cuotas en memoria
-//   const confirmedAt = new Date();
-//   const { cuotas } = buildInstallments({
-//     principal: Number(loan.monto),
-//     tna: Number(loan.interes),
-//     n: Number(loan.cant_cuo),
-//     confirmedAt
-//   });
-
-//   // 3) UPSERT de cuotas (idempotente)
-//   const payload = cuotas.map(c => ({
-//     prestamo_id: loan.id,
-//     numero_cuota: c.numero_cuota,
-//     fecha_vencimiento: c.fecha_vencimiento,
-//     amount: c.amount,
-//     interest: c.interest,
-//     principal_comp: c.principal_comp,
-//     balance: c.balance,
-//     status: c.status
-//   }));
-
-//   const { error: upsertErr } = await supabase
-//     .from("quotas")
-//     .upsert(payload, { onConflict: "prestamo_id,numero_cuota", ignoreDuplicates: true });
-
-//   if (upsertErr) {
-//     // Intento “rollback suave”: borro las cuotas que pude haber creado
-//     await supabase.from("quotas").delete().eq("prestamo_id", loan.id);
-//     return NextResponse.json({ error: upsertErr.message }, { status: 500 });
-//   }
-
-//   // 4) Marcar préstamo como confirmado (una sola vez)
-//   const { data: updated, error: updErr } = await supabase
-//     .from("prestamos")
-//     .update({ status: "confirmado", confirmed_at: confirmedAt.toISOString(), updated_at: new Date().toISOString() })
-//     .eq("id", loan.id)
-//     .neq("status", "confirmado") // evita “reconfirmar”
-//     .select("*, quotas(*)")      // devuelve con cuotas
-//     .single();
-
-//   if (updErr) {
-//     // Si fallara aquí, las cuotas quedaron creadas. Puedes decidir revertirlas:
-//     await supabase.from("quotas").delete().eq("prestamo_id", loan.id);
-//     return NextResponse.json({ error: updErr.message }, { status: 500 });
-//   }
-
-//   return NextResponse.json(updated, { status: 200 });
-// }
-// app/api/prestamos/[id]/confirm/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { buildInstallments } from "@/lib/schedule";
@@ -96,6 +22,13 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
   if (status === "confirmado") {
     return NextResponse.json({ error: "Ya está confirmado" }, { status: 409 });
   }
+
+  if (status === "rechazado") {                  // 👇 NUEVO
+    return NextResponse.json(                    // 👇 NUEVO
+      { error: "No se puede confirmar: el préstamo está rechazado" },
+      { status: 409 }
+    );
+  }                
 
   // 2) Generar cuotas (método francés) con los datos del préstamo
   const confirmedAt = new Date();
@@ -141,7 +74,6 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     .from("prestamos")
     .update({
       status: "confirmado",
-     
       updated_at: new Date().toISOString(),
       monto_final: montoFinal,       // 👈 suma de todas las cuotas
       // opcional si tienes columna:
