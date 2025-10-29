@@ -9,6 +9,7 @@ import Documents from "./Documents";
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
 
+  // Este activeLoan es solo para Overview, ya no se usa en Loans
   const activeLoan = {
     totalAmount: 500000,
     remainingBalance: 380000,
@@ -29,7 +30,8 @@ const Dashboard = () => {
       <main className="px-6 py-8">
         {activeTab === "overview" && <Overview activeLoan={activeLoan} />}
 
-        {activeTab === "loans" && <Loans activeLoan={activeLoan} />}
+        {/* Loans ahora maneja su propia data con la API */}
+        {activeTab === "loans" && <Loans />}
 
         {activeTab === "payments" && <Payments />}
 

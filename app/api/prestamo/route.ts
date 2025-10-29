@@ -38,7 +38,6 @@ export async function POST(request: NextRequest) {
     operator_id: p.operator_id ?? null,
     representante_id: p.representante_id,
     monto_final: p.monto_final ?? null,
-    interes: p.interes,                 // ← ya viene decimal (0.45)
     // created_at / updated_at las maneja la DB con defaults
   };
 

@@ -10,7 +10,7 @@ export async function GET() {
     const { data: prestamos, error: prestamosError } = await supabase
       .from("prestamos")
       .select("*")
-      .eq("status", "PENDIENTE")
+      .ilike("status", "PENDIENTE")
       .is("operator_id", null)
       .order("assigned_at", { ascending: true }); // ↑ más antiguo primero
 

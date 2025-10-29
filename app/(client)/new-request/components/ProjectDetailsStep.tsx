@@ -22,6 +22,7 @@ export default function ProjectDetailsStep() {
           <textarea
             {...register("projectDescription", { 
               required: "La descripción es requerida",
+              minLength: { value: 10, message: "Mínimo 10 caracteres" },
               maxLength: { value: 1000, message: "Máximo 1000 caracteres" }
             })}
             rows={6}

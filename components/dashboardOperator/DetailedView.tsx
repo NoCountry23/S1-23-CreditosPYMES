@@ -66,7 +66,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
     if (p.decision_at) {
       base.push({
         date: p.decision_at,
-        event: p.status === "APROBADO" ? "Solicitud aprobada" : "Solicitud rechazada",
+        event: p.status.toUpperCase() === "APROBADO" ? "Solicitud aprobada" : "Solicitud rechazada",
         user: "Operador",
       });
     }

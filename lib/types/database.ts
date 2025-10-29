@@ -41,6 +41,8 @@ export interface Prestamo {
   representante_id: string;
   created_at: string;
   updated_at: string;
+  interes: number;
+  monto_final: number;
 }
 
 // =========================
