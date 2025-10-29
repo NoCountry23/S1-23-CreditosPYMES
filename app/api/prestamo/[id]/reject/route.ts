@@ -56,7 +56,8 @@ export async function PATCH(
   }
 
   // (opcional) rol
-  const role = (auth.user.user_metadata?.app_role ?? "").toLowerCase();
+  const role = (auth.user.user_metadata?.role ?? "").toLowerCase();
+  console.log("Role del usuario autenticado:", role);
   if (!["operator", "admin"].includes(role)) {
     return NextResponse.json({ error: "Permiso denegado: se requiere rol operator o admin" }, { status: 403 });
   }
