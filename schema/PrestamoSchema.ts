@@ -1,7 +1,7 @@
 // schemas/PrestamoSchema.ts
 import { z } from "zod";
 import { IdSchema } from "./IdSchema";
-import { normalizeTna } from "@/lib/tna";
+// import { normalizeTna } from "@/lib/tna";
 // Lista de monedas permitidas (Regla de Negocio)
 export const CurrencyEnum = z.enum(["ARS", "USD"] as const, {
   error: "Moneda inválida. Debe ser ARS o USD.",
@@ -86,7 +86,7 @@ export const PrestamoSchema = z.object({
 
   monto_final: z.float64().optional().nullable(),
 
-  interes: z.union([z.string(), z.number()]).transform(v => normalizeTna(v)).optional().nullable(),
+  // interes: z.union([z.string(), z.number()]).transform(v => normalizeTna(v)).optional().nullable(),
   // id (uuid), submitted_at (timestamptz) -> Ignorados en POST, manejados por DB
 });
 

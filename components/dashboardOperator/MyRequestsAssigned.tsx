@@ -92,7 +92,7 @@ export default function MyRequestsAssigned() {
                 </div>
 
                 <div className="ml-4 flex gap-2">
-                  {p.status === "PENDIENTE" && (
+                  {p.status.toUpperCase() === "PENDIENTE" && (
                     <button
                       onClick={() => setSelectedPrestamo(p)}
                       className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 font-medium"
@@ -101,7 +101,7 @@ export default function MyRequestsAssigned() {
                       <span className="hidden md:flex">Revisar</span>
                     </button>
                   )}
-                  {p.status === "APROBADO" && (
+                  {p.status.toUpperCase() === "APROBADO" && (
                     <button className="px-6 py-2 bg-green-100 text-green-700 rounded-lg cursor-default flex items-center gap-2 font-medium">
                       <CheckCircle className="w-4 h-4" />
                       Aprobado

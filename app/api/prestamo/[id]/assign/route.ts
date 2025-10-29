@@ -34,7 +34,7 @@ export async function PUT(
       assigned_at: new Date().toISOString(), // 🕒 fecha y hora actual
     })
     .eq("id", id)
-    .eq("status", "PENDIENTE")
+    .ilike("status", "PENDIENTE")
     .is("operator_id", null)
     .select("*")
     .single();
