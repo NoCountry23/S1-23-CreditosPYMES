@@ -8,12 +8,13 @@ import {
   CheckCircle,
   Eye,
   Download,
-  MessageSquare,
+  // MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 import type { PrestamoAssigned, TimelineEvent } from "@/app/types/types";
-import { useDecidePrestamo } from "@/hooks/useDecidePrestamo";
+// import { useDecidePrestamo } from "@/hooks/useDecidePrestamo";
 import { useConfirmPrestamo } from "@/hooks/useConfirmPrestamo";
+import { useRejectPrestamo } from "@/hooks/useRejectPrestamo";
 import { toast } from "react-toastify";
 import RiskAnalysis from "@/components/dashboardOperator/RiskAnalysis";
 
@@ -23,11 +24,13 @@ type Props = {
 };
 
 export default function DetailedView({ prestamo, onClose }: Props) {
-  const { mutate } = useDecidePrestamo();
+  // const { mutate } = useDecidePrestamo();
+  const { mutate: reject } = useRejectPrestamo();
   const sugerencia = prestamo.sugerencia_ia?.[0] ?? null;
   const docs = prestamo.pyme.support_documents ?? [];
   const { mutate: confirm } = useConfirmPrestamo();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showReject, setShowReject] = useState(false);
 
   // const handleConfirm = () => {
   //   if (window.confirm("¿Confirmar el préstamo y generar el cronograma de cuotas?")) {
@@ -36,12 +39,14 @@ export default function DetailedView({ prestamo, onClose }: Props) {
   // };
   const handleConfirm = () => setShowConfirm(true);
 
-  const handleReject = () => {
-    const reason = window.prompt("Motivo del rechazo:");
-    if (reason) {
-      mutate({ id: prestamo.id, decision: "REJECT", reason }, { onSuccess: () => onClose() });
-    }
-  };
+  const handleReject = () => setShowReject(true);
+
+  // const handleReject = () => {
+  //   const reason = window.prompt("Motivo del rechazo:");
+  //   if (reason) {
+  //     mutate({ id: prestamo.id, decision: "REJECT", reason }, { onSuccess: () => onClose() });
+  //   }
+  // };
 
   // dentro de DetailedView
   const buildTimeline = (p: PrestamoAssigned) => {
@@ -173,7 +178,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                     <div>
                       <p className="text-gray-600 dark:text-gray-500">Website</p>
                       <p className="font-medium text-blue-600">
-                        {prestamo.pyme.url_pyme ?? "-"}  
+                        {prestamo.pyme.url_pyme ?? "-"}
                       </p>
                     </div>
                   </div>
@@ -361,28 +366,34 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                   <div className="space-y-3">
                     <button
                       onClick={handleConfirm}
-                      disabled={prestamo.status !== "PENDIENTE"}
-                      className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 font-medium"
-                    >
+                      disabled={prestamo.status.toUpperCase() !== "PENDIENTE"}
+                      className={`w-full px-4 py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors
+                        ${prestamo.status.toUpperCase() === "PENDIENTE"
+      ? "bg-green-600 text-white hover:bg-green-700"
+      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    }`}>
                       <CheckCircle className="w-5 h-5" />
                       Aprobar Solicitud
                     </button>
 
                     <button
-                      onClick={() => handleReject}
-                      disabled={prestamo.status !== "PENDIENTE"}
-                      className="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 font-medium"
-                    >
+                      onClick={handleReject}
+                      disabled={prestamo.status.toUpperCase() !== "PENDIENTE"}
+                      className={`w-full px-4 py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors
+ ${prestamo.status.toUpperCase() === "PENDIENTE"
+      ? "bg-red-600 text-white hover:bg-red-700"
+      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    }`}>
                       <XCircle className="w-5 h-5" />
                       Rechazar Solicitud
                     </button>
 
-                    <button
-                      disabled={prestamo.status !== "PENDIENTE"}
+                    {/* <button
+                      disabled={prestamo.status.toUpperCase() !== "PENDIENTE"}
                       className="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 font-medium">
                       <MessageSquare className="w-5 h-5" />
                       Solicitar Info Adicional
-                    </button>
+                    </button> */}
                   </div>
                   {/* )} */}
                 </div>
@@ -392,7 +403,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                   {/* <h3 className="text-lg font-semibold mb-4">
                     Análisis de Riesgo
                   </h3> */}
-                  <RiskAnalysis cuit={prestamo.pyme.cuil_cuit} ingresoMensual={(prestamo.pyme.merch_years)/12} />
+                  <RiskAnalysis cuit={prestamo.pyme.cuil_cuit} ingresoMensual={(prestamo.pyme.merch_years) / 12} />
                 </div>
 
                 {/* Timeline */}
@@ -458,7 +469,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                 {/* MODAL CONFIRM */}
                 {showConfirm && (
                   <div className="modal modal-open">
-                    <div className="modal-box bg-white">
+                    <div className="modal-box bg-white dark:bg-gray-800">
                       <h3 className="font-bold text-lg">Confirmar préstamo</h3>
                       <p className="py-4">
                         ¿Generar el cronograma de cuotas para este préstamo aprobado?
@@ -481,6 +492,53 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                           Sí, confirmar
                         </button>
                         <button className="btn btn-ghost" onClick={() => setShowConfirm(false)}>
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* MODAL REJECT */}
+                {showReject && (
+                  <div className="modal modal-open">
+                    <div className="modal-box bg-white dark:bg-gray-800">
+                      <h3 className="font-bold text-lg">Rechazar préstamo</h3>
+
+                      <label className="label">
+                        <span className="label-text mb-4">Motivo del rechazo</span>
+                      </label>
+                      <textarea
+                        id="rejectReason"
+                        className="textarea textarea-neutral w-full bg-white  dark:bg-gray-700 "
+                        rows={4}
+                        defaultValue={
+                          sugerencia?.explanation ??
+                          "No cumple con los requisitos mínimos de evaluación. "
+                        }
+                      />
+
+                      <div className="modal-action">
+                        <button
+                          className="btn btn-error"
+                          onClick={() => {
+                            const reason = (
+                              document.getElementById("rejectReason") as HTMLTextAreaElement
+                            ).value.trim();
+                            if (!reason) {
+                              toast.warn("Por favor ingrese un motivo");
+                              return;
+                            }
+                            setShowReject(false);
+                            reject(
+                              { id: prestamo.id, reason },
+                              { onSuccess: () => onClose() }
+                            );
+                          }}
+                        >
+                          Sí, rechazar
+                        </button>
+                        <button className="btn btn-ghost" onClick={() => setShowReject(false)}>
                           Cancelar
                         </button>
                       </div>

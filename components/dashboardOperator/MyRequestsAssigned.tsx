@@ -107,8 +107,10 @@ export default function MyRequestsAssigned() {
                       Aprobado
                     </button>
                   )}
-                  {p.status === "RECHAZADO" && (
-                    <button className="px-6 py-2 bg-red-100 text-red-700 rounded-lg cursor-default flex items-center gap-2 font-medium">
+                  {p.status.toUpperCase() === "RECHAZADO" && (
+                    <button
+                      onClick={() => setSelectedPrestamo(p)}
+                      className="px-6 py-2 bg-red-100 text-red-700 rounded-lg cursor-default flex items-center gap-2 font-medium">
                       <XCircle className="w-4 h-4" />
                       Rechazado
                     </button>
