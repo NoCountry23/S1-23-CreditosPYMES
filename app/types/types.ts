@@ -16,6 +16,7 @@ export type PrestamoAssigned = {
         phone?: string;
         email?: string;
         address?: string;
+        url_pyme?: string;
         annual_billing_estimated: number;
         amount_employees: number;
         merch_years: number;

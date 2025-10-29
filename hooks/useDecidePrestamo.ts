@@ -26,3 +26,5 @@ export const useDecidePrestamo = () => {
     },
   });
 };
+
+/// ya no vamos a usar este hooks, esperamos el rejec para eliminar el hooks

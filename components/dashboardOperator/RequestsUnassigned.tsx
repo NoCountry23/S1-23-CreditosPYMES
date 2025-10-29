@@ -95,7 +95,7 @@ export default function RequestsUnassigned() {
       {/* Filtro por prioridad */}
       <div className="flex gap-4 mb-6">
         <select
-          className="px-4 py-2 border bg-white dark:bg-gray-700 border-gray-500/50 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="px-4 py-2 border   rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           value={filterPriority}
           onChange={(e) => setFilterPriority(e.target.value as "all" | "high" | "medium" | "low")}
         >
@@ -115,7 +115,7 @@ export default function RequestsUnassigned() {
           return (
             <div
               key={pr.id}
-              className="rounded-lg border border-gray-500/50 dark:bg-base-100 p-6 hover:shadow-lg transition-shadow"
+              className="rounded-lg border border-gray-500/50 dark:bg-transparent p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
