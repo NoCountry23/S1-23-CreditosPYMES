@@ -149,9 +149,28 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     })
     .eq("id", loan.id)
     .neq("status", "confirmado")
-    .select("*, quotas(*)")
+    .select("*, quotas(*), pyme(*)")
     .single();
+  const {data: {user}}= await supabase.auth.admin.getUserById(updated.representante_id);
+  const response = await fetch(
+    "https://docusign-api-omega.vercel.app/signature/send",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: user?.user_metadata,
+        loan: updated,
+        pyme: updated.pyme,
+        quotas: updated.quotas
+      }),
+    },
+  );
 
+  if (!response.ok) {
+    throw new Error("Error al comunicarse con el servicio de firma");
+  }
   if (updErr) {
     // revertimos cuotas si falla el update final
     await supabase.from("quotas").delete().eq("prestamo_id", loan.id);
