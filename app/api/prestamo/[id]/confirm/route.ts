@@ -75,7 +75,8 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     .update({
       status: "confirmado",
       updated_at: new Date().toISOString(),
-      monto_final: montoFinal,       // 👈 suma de todas las cuotas
+      monto_final: montoFinal,
+      decision_at: confirmedAt,       // 👈 suma de todas las cuotas
       // opcional si tienes columna:
       // total_interes: totalInteres,
     })
