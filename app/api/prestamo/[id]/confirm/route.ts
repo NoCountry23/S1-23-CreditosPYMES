@@ -43,7 +43,6 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
   const montoFinal = Number(
     cuotas.reduce((acc, c) => acc + Number(c.amount), 0).toFixed(2)
   );
- 
   // 4) UPSERT de cuotas (idempotente)
   const payload = cuotas.map(c => ({
     prestamo_id: loan.id,
@@ -75,7 +74,8 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     .update({
       status: "confirmado",
       updated_at: new Date().toISOString(),
-      monto_final: montoFinal,       // 👈 suma de todas las cuotas
+      monto_final: montoFinal, // 👈 suma de todas las cuotas
+      decision_at: new Date().toISOString(),    
       // opcional si tienes columna:
       // total_interes: totalInteres,
     })
@@ -84,7 +84,7 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     .select("*, quotas(*), pyme(*)")
     .single();
   const {data: {user}}= await supabase.auth.admin.getUserById(updated.representante_id);
-  const response = await fetch(
+  const docusignResponse = await fetch(
     "https://docusign-api-omega.vercel.app/signature/send",
     {
       method: "POST",
@@ -100,9 +100,12 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     },
   );
 
-  if (!response.ok) {
+  if (!docusignResponse.ok) {
     throw new Error("Error al comunicarse con el servicio de firma");
   }
+  const docusignData = await docusignResponse.json();
+  console.log(docusignData, "docusignData");
+  await supabase.from("prestamos").update({env_docusign_id: docusignData.envelopeId}).eq("id", id);
   if (updErr) {
     // revertimos cuotas si falla el update final
     await supabase.from("quotas").delete().eq("prestamo_id", loan.id);
