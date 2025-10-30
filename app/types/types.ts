@@ -9,6 +9,7 @@ export type PrestamoAssigned = {
     assigned_at: string;
     created_at: string;
     decision_at?: string;
+    interes: number;
     pyme: {
         id: string;
         company_name: string;
@@ -40,7 +41,7 @@ export type SugerenciaIA = {
     id: string;
     prestamo_id: string;
     risk_level: "bajo" | "medio" | "alto";
-    recommendation: "APROBAR" | "RECHAZAR" | "OBSERVAR";
+    should_approve: "APROBAR" | "RECHAZAR" | "OBSERVAR";
     explanation: string;
 };
 

@@ -138,7 +138,7 @@ export async function GET(
 ) {
   try {
     const { cuit } = await params;
-    const trimmed = cuit.trim();
+    const trimmed = cuit.trim().replace(/-/g, "");;
   
     const bcra = await fetchBcra<HistorialResponse>(BCRA_HISTORICA(trimmed));
     const deuda = bcra.results;
