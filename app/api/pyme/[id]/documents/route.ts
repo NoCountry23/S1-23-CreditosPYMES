@@ -5,7 +5,7 @@ export async function GET(req: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } =  params;
+    const { id } = await params;
     const supabase = await createClient();
 
     const { data, error } = await supabase
