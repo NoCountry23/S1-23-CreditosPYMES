@@ -1,0 +1,58 @@
+import { Button } from "@/components/ui/button";
+import useFormatAmount from "@/hooks/useFormatAmount";
+import { Quota } from "@/lib/types/database";
+import { es } from "date-fns/locale";
+import React from "react";
+import { format } from "date-fns";
+
+export default function Quotas({ quotas }: { quotas: Quota[] }) {
+  const formatAmount = useFormatAmount;
+  
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full max-w-3xl m-auto">
+        <thead>
+          <tr className="border-b">
+            <th className="text-center py-3 px-4 font-medium text-gray-500">Cuota</th>
+            <th className="text-center py-3 px-4 font-medium text-gray-500">Vencimiento</th>
+            <th className="text-center py-3 px-4 font-medium text-gray-500">Monto</th>
+            <th className="text-center py-3 px-4 font-medium text-gray-500">Estado</th>
+            <th className="text-center py-3 px-4 font-medium text-gray-500">Fecha de Pago</th>
+          </tr>
+        </thead>
+        <tbody>
+          {quotas.map((quota) => {
+            return (
+              <tr key={quota.id} className="border-b hover:bg-gray-500/20">
+                <td className="py-3 px-4 font-medium text-center">#{quota.numero_cuota}</td>
+                <td className="py-3 px-4 text-center">
+                  {format(new Date(quota.fecha_vencimiento), "dd/MM/yyyy", { locale: es })}
+                </td>
+                <td className="py-3 px-4 text-center">
+                  {formatAmount(quota.amount)}
+                </td>
+                <td className="py-3 px-4 text-center">
+                  <span className={`px-3 py-1 w-fit h-fit ${quota.status?.toLowerCase() === "pagada" && "bg-green-500" } ${quota.status?.toLowerCase() === "pendiente" && "bg-yellow-500" } ${quota.status?.toLowerCase() === "vencida" && "bg-red-500" }  backdrop-blur-sm rounded-full text-sm font-medium`}>
+                    {quota.status?.toUpperCase()}
+                  </span>
+                </td>
+                <td className="py-3 px-4 text-center">
+          
+                  {quota.paid_at ? format(new Date(quota.paid_at), "dd/MM/yyyy HH:mm", { locale: es }) : "-"}
+                </td>
+                {
+                  !(quota.status === "pagada") &&
+                            <td>
+                              <Button size="sm" className="w-full">
+                                Pagar
+                              </Button>
+                            </td>
+                }
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}

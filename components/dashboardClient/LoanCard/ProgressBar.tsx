@@ -21,7 +21,7 @@ export default function ProgressBar({ loanId }: { loanId: string }) {
     return <p>Cargando…</p>;
   }
   
-  const quotasPaid = quotas.filter((q) => q.status?.toLowerCase() === "paid");
+  const quotasPaid = quotas.filter((q) => q.status?.toLowerCase() === "pagada");
   const progressPercentage = (quotasPaid.length / quotas.length) * 100;
   
   return (

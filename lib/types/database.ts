@@ -37,12 +37,14 @@ export interface Prestamo {
   submitted_at: string;
   decision_at?: string;
   rejection_reason?: string;
+  assigned_at?: string;
   operator_id?: string;
   representante_id: string;
   created_at: string;
   updated_at: string;
   interes: number;
   monto_final: number;
+  env_docusign_id?: string;
 }
 
 // =========================

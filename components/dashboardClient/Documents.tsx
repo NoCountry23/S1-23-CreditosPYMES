@@ -19,7 +19,7 @@ export default function Documents() {
       return data as  SupportDocument[];
     },
     enabled: !!pyme?.id
-  });
+  });  
   if ( error ) {
     return null;
   }

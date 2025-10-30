@@ -2,13 +2,27 @@
 
 import useFormatAmount from "@/hooks/useFormatAmount";
 import { Prestamo } from "@/lib/types/database";
-import { CreditCard } from "lucide-react";
+import { ArrowRight, CreditCard } from "lucide-react";
 import ProgressBar from "./ProgressBar";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 export default function LoanCard({ loan }: {loan:Prestamo}) {
   const formatAmount = useFormatAmount;
+  const {data: docusignStatus} =useQuery({
+    queryKey: ["loan", loan.env_docusign_id],
+    queryFn: async () => {
+      const res = await fetch(`https://docusign-api-omega.vercel.app/signature/status/${loan.env_docusign_id}` );
+      if (!res.ok) throw new Error("Error al cargar el estado de la firma");
+      const data = await res.json();
+      return data  ;
+    },
+    enabled: !!loan.env_docusign_id,
+    refetchOnWindowFocus: true
+  });
+  
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-shadow">
+    <div className="bg-white max-w-3xl w-full mx-auto dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-shadow h-fit">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-700 dark:to-blue-800 p-6 text-white">
         <div className="flex  flex-col md:flex-row justify-between mb-2">
@@ -28,7 +42,7 @@ export default function LoanCard({ loan }: {loan:Prestamo}) {
       {/* Body */}
       <div className="p-6">
         {/* Amounts Grid */}
-        <div className="grid grid-flow-row md:grid-flow-col gap-4 mb-6">
+        <div className="grid grid-flow-row md:grid-cols-2 gap-4 mb-6">
           <div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Monto Original</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -43,24 +57,20 @@ export default function LoanCard({ loan }: {loan:Prestamo}) {
               </p>
             </div>
           )}
-          {
-            loan.status === "pendiente" && (
-              <>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Cantidad de cuotas</p>
-                  <p className="text-2xl font-bold  text-blue-600 dark:text-blue-400">
-                    {loan.term_months}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Interés anual</p>
-                  <p className="text-2xl font-bold  text-blue-600 dark:text-blue-400">
-                    {loan.interes * 100}%
-                  </p>
-                </div>
-              </>
-            )
-          }
+         
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Cantidad de cuotas</p>
+            <p className="text-2xl font-bold  text-blue-600 dark:text-blue-400">
+              {loan.term_months}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Interés anual</p>
+            <p className="text-2xl font-bold  text-blue-600 dark:text-blue-400">
+              {loan.interes * 100}%
+            </p>
+          </div>
+           
         </div>
         {loan.rejection_reason && (
 
@@ -71,8 +81,19 @@ export default function LoanCard({ loan }: {loan:Prestamo}) {
         )}
         {/* Progress Bar */}
         {loan.status === "confirmado" && (
-          
-          <ProgressBar loanId={loan.id} />
+          <>
+            { loan.env_docusign_id && docusignStatus?.status === "sent" &&  (
+              <div className='text-sm text-yellow-800 dark:text-yellow-400 space-y-2 bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 dark:border-yellow-500 p-6 rounded-r-lg'>
+                <p className='font-semibold'>Contrato pendiente</p>
+                <p>Hemos enviado el contrato a tu correo, por favor revisalo </p>
+              </div>
+            )}
+            {
+              loan.env_docusign_id && docusignStatus?.status === "completed" &&  (
+                <ProgressBar loanId={loan.id} />
+              )
+            }
+          </>
         )}
         {
           loan.status === "pendiente" && (
@@ -88,6 +109,10 @@ export default function LoanCard({ loan }: {loan:Prestamo}) {
           )
         }
       </div>
+      <Link href={`/loan/${loan.id}`} className="border-t border-gray-200 dark:border-gray-700 justify-center flex gap-2 items-center p-4 hover:bg-gray-100 dark:hover:bg-gray-500/50">
+            Ver Detalles
+        <ArrowRight className="ml-2 h-4 w-4" />
+      </Link>
     </div>
   );
 }
