@@ -117,20 +117,40 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                     </p>
                   </div>
                 </div>
-                Riesgo: {details.riskAnalysis.riskLevel}
+                Riesgo: {sugerencia.riskLevel}
               </div>
             </div> */}
             {/* Risk / Sugerencia IA */}
             {sugerencia && (
-              <div
-                className={`p-4 rounded-lg border ${sugerencia.risk_level === "alto"
-                  ? "border-red-300 bg-red-50 text-red-800"
-                  : sugerencia.risk_level === "medio"
-                    ? "border-yellow-300 bg-yellow-50 text-yellow-800"
-                    : "border-green-300 bg-green-50 text-green-800"}`}>
-                <p className="font-semibold">Sugerencia IA: {sugerencia.recommendation}</p>
-                <p className="text-sm mt-1">{sugerencia.explanation}</p>
+              <div className={`
+  rounded-lg border-2 p-4
+  ${sugerencia.risk_level === "alto"
+                ? "border-red-500 dark:border-red-400"
+                : sugerencia.risk_level === "medio"
+                  ? "border-yellow-500 dark:border-yellow-400"
+                  : "border-green-600 dark:border-green-400"}
+`}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-gray-800 dark:text-gray-100">Sugerencia IA</span>
+
+                  <span className={`
+      text-xs font-semibold uppercase tracking-wide
+      px-2 py-0.5 rounded-full border bg-transparent
+      ${sugerencia.risk_level === "alto"
+                ? "text-red-600 border-red-600 dark:text-red-400 dark:border-red-400"
+                : sugerencia.risk_level === "medio"
+                  ? "text-yellow-600 border-yellow-600 dark:text-yellow-400 dark:border-yellow-400"
+                  : "text-green-700 border-green-700 dark:text-green-400 dark:border-green-400"}
+    `}>
+                    Riesgo {sugerencia.risk_level}
+                  </span>
+                </div>
+
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  {sugerencia.explanation}
+                </p>
               </div>
+
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -193,7 +213,7 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                   <div className="grid grid-cols-2 gap-4">
                     <div className=" p-4 rounded-lg">
                       <p className="text-sm text-gray-600 dark:text-gray-500">Facturación Anual</p>
-                      <p className="text-2xl font-bold text-green-700">
+                      <p className="text-xl md:text-2xl font-bold text-green-700">
                         ${prestamo.pyme.annual_billing_estimated.toLocaleString()}
                       </p>
                     </div>
@@ -201,8 +221,8 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                       <p className="text-sm text-gray-600">
                         Facturación Mensual
                       </p>
-                      <p className="text-2xl font-bold text-blue-700">
-                        {/* ${details.financialData.monthlyRevenue.toLocaleString()} */}
+                      <p className="text-xl md:text-2xl font-bold text-blue-700">
+                      ${(prestamo.pyme.annual_billing_estimated / 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                       </p>
                     </div>
                     <div className=" p-4 rounded-lg">
@@ -220,28 +240,14 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-500">Score Crediticio</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="flex-1  rounded-full h-2">
-                          <div
-                            className="bg-green-600 h-2 rounded-full"
-                          // style={{
-                          //   width: `${(details.financialData.creditScore / 900) * 100 }%`,
-                          // }}
-                          >
-
-                          </div>
-                        </div>
-                        <span className="font-bold text-lg">
-                          {/* {details.financialData.creditScore} */}
-                        </span>
-                      </div>
+                      {/* <p className="text-sm text-gray-600 dark:text-gray-500">Score Crediticio</p> */}
+                      
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-500">Estado AFIP</p>
-                      <p className="font-medium text-green-600 mt-1">
-                        {/* ✓ {details.financialData.taxStatus} */}
-                      </p>
+                      {/* <p className="text-sm text-gray-600 dark:text-gray-500">Estado AFIP</p> */}
+                      {/* <p className="font-medium text-green-600 mt-1"> */}
+                      {/* ✓ {details.financialData.taxStatus} */}
+                      {/* </p> */}
                     </div>
                   </div>
                 </div>
@@ -258,13 +264,13 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                         <p className="text-sm text-gray-600 dark:text-gray-500">
                           Monto Solicitado
                         </p>
-                        <p className="text-2xl font-bold text-blue-600">
+                        <p className="text-xl md:text-2xl font-bold text-blue-600">
                           ${prestamo.monto.toLocaleString()} {prestamo.currency}
                         </p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-600 dark:text-gray-500">Plazo</p>
-                        <p className="text-2xl font-bold">
+                        <p className="text-xl md:text-2xl font-bold">
                           {prestamo.term_months} meses
                         </p>
                       </div>
@@ -273,13 +279,14 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                           Cuota Mensual Estimada
                         </p>
                         <p className="text-xl font-bold">
+                          -
                           {/* ${details.loanDetails.monthlyPayment.toLocaleString()} */}
                         </p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-600 dark:text-gray-500">Tasa de Interés</p>
                         <p className="text-xl font-bold">
-                          {/* {details.loanDetails.interestRate}% TNA */}
+                          {prestamo.interes * 100}% TNA
                         </p>
                       </div>
                     </div>
@@ -289,14 +296,14 @@ export default function DetailedView({ prestamo, onClose }: Props) {
                         {prestamo.purpose}
                       </p>
                     </div>
-                    <div>
+                    {/* <div>
                       <p className="text-sm text-gray-600 mb-1 dark:text-gray-500">
                         Descripción del Proyecto
                       </p>
                       <p className="text-sm     p-3 rounded">
-                        {/* {details.loanDetails.description} */}
+                        {details.loanDetails.description}
                       </p>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 

@@ -101,8 +101,10 @@ export default function MyRequestsAssigned() {
                       <span className="hidden md:flex">Revisar</span>
                     </button>
                   )}
-                  {p.status.toUpperCase() === "APROBADO" && (
-                    <button className="px-6 py-2 bg-green-100 text-green-700 rounded-lg cursor-default flex items-center gap-2 font-medium">
+                  {p.status.toUpperCase() === "CONFIRMADO" && (
+                    <button
+                      onClick={() => setSelectedPrestamo(p)}
+                      className="px-6 py-2 bg-green-100 text-green-700 rounded-lg cursor-default flex items-center gap-2 font-medium">
                       <CheckCircle className="w-4 h-4" />
                       Aprobado
                     </button>
