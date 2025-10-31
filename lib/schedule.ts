@@ -54,7 +54,7 @@ export function buildInstallments(params: {
       interest: round2(interest),
       principal_comp: round2(principalAdj),
       balance: round2(Math.max(newBalance, 0)),
-      status: "pending",
+      status: "pendiente",
     });
 
     balance = newBalance;
