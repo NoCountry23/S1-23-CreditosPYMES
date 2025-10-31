@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import useFormatAmount from "@/hooks/useFormatAmount";
 import { Quota } from "@/lib/types/database";
 import { es } from "date-fns/locale";
 import React from "react";
 import { format } from "date-fns";
+import PayButton from "@/components/PayButton";
 
 export default function Quotas({ quotas }: { quotas: Quota[] }) {
   const formatAmount = useFormatAmount;
@@ -43,9 +44,10 @@ export default function Quotas({ quotas }: { quotas: Quota[] }) {
                 {
                   !(quota.status === "pagada") &&
                             <td>
-                              <Button size="sm" className="w-full">
+                              {/* <Button size="sm" className="w-full bg-red-500">
                                 Pagar
-                              </Button>
+                              </Button> */}
+                              <PayButton quota={quota} />
                             </td>
                 }
               </tr>
