@@ -7,9 +7,18 @@ import { format } from "date-fns";
 
 export default function Quotas({ quotas }: { quotas: Quota[] }) {
   const formatAmount = useFormatAmount;
-  
+  const [initialItem, setInitialItem] = React.useState(0);
+  const [page, setPage] = React.useState(1);
+  const handlePreviousPage = () => {
+    setInitialItem(initialItem - 10);
+    setPage(page - 1);
+  };
+  const handleNextPage = () => {
+    setInitialItem(initialItem + 10);
+    setPage(page + 1);
+  };
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto space-y-5">
       <table className="w-full max-w-3xl m-auto">
         <thead>
           <tr className="border-b">
@@ -21,7 +30,7 @@ export default function Quotas({ quotas }: { quotas: Quota[] }) {
           </tr>
         </thead>
         <tbody>
-          {quotas.map((quota) => {
+          {quotas.slice(initialItem, initialItem + 10).map((quota) => {
             return (
               <tr key={quota.id} className="border-b hover:bg-gray-500/20">
                 <td className="py-3 px-4 font-medium text-center">#{quota.numero_cuota}</td>
@@ -53,6 +62,11 @@ export default function Quotas({ quotas }: { quotas: Quota[] }) {
           })}
         </tbody>
       </table>
+      <div className=' flex justify-between w-full max-w-3xl m-auto'>
+        <Button size={"lg"} disabled={page === 1} onClick={handlePreviousPage}>Anterior</Button>
+        <p>{page} de {Math.ceil(quotas.length / 10)}</p>
+        <Button size={"lg"} disabled={quotas.length < 10 || page === Math.ceil(quotas.length / 10)} onClick={handleNextPage}>Siguiente</Button>
+      </div>
     </div>
   );
 }
