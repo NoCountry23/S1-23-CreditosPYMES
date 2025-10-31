@@ -20,7 +20,7 @@ export default function MenuHeaderMobile() {
         {openMenu ? <X /> : <MenuIcon />}
       </summary>
       <div
-        className={`overflow-hidden absolute top-full bg-background shadow-md rounded-md w-full left-0 transition-all z-10 duration-300 ease-in-out `}
+        className={"overflow-hidden absolute top-full bg-background shadow-md rounded-md w-full left-0 transition-all z-10 duration-300 ease-in-out "}
       >
         <ul className="menu menu-vertical px-1 w-full space-y-4">
           <li>

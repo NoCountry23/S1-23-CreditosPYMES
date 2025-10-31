@@ -33,7 +33,7 @@ export async function POST(req: Request, context: { params: { quotaId: string } 
         },
       ],
       back_urls: {
-        success: "https://www.google.com",
+        success: "https://avance-profesional.vercel.app/api/s23pyme",
         failure: `http://localhost:3000/api/quotas/${quotaId}/failure`,
         pending: `http://localhost:3000/api/quotas/${quotaId}/pending`,
       },

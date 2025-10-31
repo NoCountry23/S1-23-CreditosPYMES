@@ -1,18 +1,18 @@
-import React from 'react'
+import React from "react";
 import {
   Controller,
   FieldError,
   FieldErrorsImpl,
   Merge,
   useFormContext,
-} from 'react-hook-form'
-import { FormDataSignUp } from './SignUpForm'
+} from "react-hook-form";
+import { FormDataSignUp } from "./SignUpForm";
 
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-import { CountryData } from '@/app/types/phone'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
-import Link from 'next/link'
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { CountryData } from "@/app/types/phone";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 // interface CountryData {
 //   dialCode: string;
@@ -31,25 +31,25 @@ export default function SecondStep({
     control,
     register,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext();
   const companyErrors = errors?.company as Merge<
     FieldError,
-    FieldErrorsImpl<FormDataSignUp['company']>
-  >
+    FieldErrorsImpl<FormDataSignUp["company"]>
+  >;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePhoneChange = (value: string, country: object, field: any) => {
-    const countryData = country as CountryData
+    const countryData = country as CountryData;
 
     if (countryData?.dialCode && value.length > countryData.dialCode.length) {
-      const phoneNumber = value.slice(countryData.dialCode.length)
-      const finalValue = `+${countryData.dialCode}-${phoneNumber}`
+      const phoneNumber = value.slice(countryData.dialCode.length);
+      const finalValue = `+${countryData.dialCode}-${phoneNumber}`;
 
-      field.onChange(finalValue)
+      field.onChange(finalValue);
     } else {
-      field.onChange(value)
+      field.onChange(value);
     }
-  }
+  };
 
   return (
     <div className='space-y-5'>
@@ -61,12 +61,12 @@ export default function SecondStep({
         </label>
         <input
           type='text'
-          {...register('company.companyName', {
-            required: 'La razón social es requerida',
-            minLength: { value: 3, message: 'Mínimo 3 caracteres' },
+          {...register("company.companyName", {
+            required: "La razón social es requerida",
+            minLength: { value: 3, message: "Mínimo 3 caracteres" },
           })}
           className={`w-full px-4 py-3 outline-none border border-gray-500/50 bg-input rounded-lg focus:ring-2 focus:ring-blue-500 ${
-            companyErrors?.companyName ? 'border-red-500' : 'border-gray-500'
+            companyErrors?.companyName ? "border-red-500" : "border-gray-500"
           }`}
           placeholder='Mi Empresa S.R.L.'
         />
@@ -82,17 +82,17 @@ export default function SecondStep({
         </label>
         <input
           type='text'
-          {...register('company.email', {
-            required: 'La razón social es requerida',
+          {...register("company.email", {
+            required: "La razón social es requerida",
             pattern: {
               value:
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              message: 'Formato de email incorrecto',
+              message: "Formato de email incorrecto",
             },
-            minLength: { value: 3, message: 'Mínimo 3 caracteres' },
+            minLength: { value: 3, message: "Mínimo 3 caracteres" },
           })}
           className={`w-full px-4 py-3 outline-none border border-gray-500/50 bg-input rounded-lg focus:ring-2 focus:ring-blue-500 ${
-            companyErrors?.email ? 'border-red-500' : 'border-gray-500'
+            companyErrors?.email ? "border-red-500" : "border-gray-500"
           }`}
           placeholder='hCQlO@example.com'
         />
@@ -107,15 +107,15 @@ export default function SecondStep({
           <label className='block text-sm font-medium  mb-2'>CUIT *</label>
           <input
             type='text'
-            {...register('company.cuit', {
-              required: 'El CUIT es requerido',
+            {...register("company.cuit", {
+              required: "El CUIT es requerido",
               pattern: {
                 value: /^\d{2}-\d{8}-\d{1}$/,
-                message: 'Formato: XX-XXXXXXXX-X',
+                message: "Formato: XX-XXXXXXXX-X",
               },
             })}
             className={`w-full px-4 py-3 outline-none border border-gray-500/50 bg-input rounded-lg focus:ring-2 focus:ring-blue-500 ${
-              companyErrors?.cuit ? 'border-red-500' : 'border-gray-500'
+              companyErrors?.cuit ? "border-red-500" : "border-gray-500"
             }`}
             placeholder='30-12345678-9'
           />
@@ -131,11 +131,11 @@ export default function SecondStep({
             Rubro / Industria *
           </label>
           <select
-            {...register('company.industry', {
-              required: 'Selecciona un rubro',
+            {...register("company.industry", {
+              required: "Selecciona un rubro",
             })}
             className={`w-full px-4 py-3 outline-none border border-gray-500/50 bg-input rounded-lg focus:ring-2 focus:ring-blue-500 ${
-              companyErrors?.industry ? 'border-red-500' : 'border-gray-500'
+              companyErrors?.industry ? "border-red-500" : "border-gray-500"
             }`}
           >
             <option value=''>Seleccionar...</option>
@@ -164,15 +164,15 @@ export default function SecondStep({
         </label>
         <input
           type='number'
-          {...register('company.yearsInBusiness', {
-            required: 'Este campo es requerido',
-            min: { value: 0, message: 'Debe ser un número positivo' },
-            max: { value: 100, message: 'Valor no válido' },
+          {...register("company.yearsInBusiness", {
+            required: "Este campo es requerido",
+            min: { value: 0, message: "Debe ser un número positivo" },
+            max: { value: 100, message: "Valor no válido" },
           })}
           className={`w-full px-4 py-3 outline-none border border-gray-500/50 bg-input rounded-lg focus:ring-2 focus:ring-blue-500  ${
             companyErrors?.yearsInBusiness
-              ? 'border-red-500'
-              : 'border-gray-500'
+              ? "border-red-500"
+              : "border-gray-500"
           }`}
           placeholder='5'
         />
@@ -192,11 +192,11 @@ export default function SecondStep({
           name='company.phone'
           control={control}
           rules={{
-            required: 'El teléfono es requerido',
+            required: "El teléfono es requerido",
             validate: (value) => {
-              if (!value) return true
-              const phoneRegex = /^\+\d{1,4}-\d{6,14}$/
-              return phoneRegex.test(value) || 'Formato de teléfono inválido'
+              if (!value) return true;
+              const phoneRegex = /^\+\d{1,4}-\d{6,14}$/;
+              return phoneRegex.test(value) || "Formato de teléfono inválido";
             },
           }}
           render={({ field }) => (
@@ -204,58 +204,58 @@ export default function SecondStep({
               className={`
         relative border border-gray-500/50 rounded-lg
         focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent
-        ${companyErrors?.phone ? 'border-red-500' : ''}
+        ${companyErrors?.phone ? "border-red-500" : ""}
         transition-all duration-200
       `}
             >
               <PhoneInput
                 country='ar'
                 onlyCountries={[
-                  'ar',
-                  'br',
-                  'cl',
-                  'uy',
-                  'py',
-                  'bo',
-                  'pe',
-                  'ec',
-                  'co',
-                  've',
-                  'mx',
-                  'es',
-                  'us',
+                  "ar",
+                  "br",
+                  "cl",
+                  "uy",
+                  "py",
+                  "bo",
+                  "pe",
+                  "ec",
+                  "co",
+                  "ve",
+                  "mx",
+                  "es",
+                  "us",
                 ]}
-                preferredCountries={['ar', 'br', 'cl', 'uy']}
+                preferredCountries={["ar", "br", "cl", "uy"]}
                 enableSearch={true}
                 countryCodeEditable={false}
                 searchPlaceholder='Buscar país...'
                 placeholder='11 1234-5678'
                 value={
                   field.value
-                    ? field.value.replace('+', '').replace('-', '')
-                    : ''
+                    ? field.value.replace("+", "").replace("-", "")
+                    : ""
                 }
                 onChange={(value, country) =>
                   handlePhoneChange(value, country, field)
                 }
                 inputStyle={{
-                  width: '100%',
-                  padding: '24px 16px 24px 60px',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  lineHeight: '1.5',
-                  backgroundColor: 'hsl(var(--input))',
-                  outline: 'none',
+                  width: "100%",
+                  padding: "24px 16px 24px 60px",
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  lineHeight: "1.5",
+                  backgroundColor: "hsl(var(--input))",
+                  outline: "none",
                 }}
                 buttonStyle={{
-                  border: 'none',
-                  backgroundColor: 'transparent',
-                  padding: '0 12px',
-                  height: '100%',
+                  border: "none",
+                  backgroundColor: "transparent",
+                  padding: "0 12px",
+                  height: "100%",
                 }}
                 containerStyle={{
-                  border: 'none',
+                  border: "none",
                 }}
               />
             </div>
@@ -273,10 +273,10 @@ export default function SecondStep({
         <label className='block text-sm font-medium  mb-2'>Sitio Web *</label>
         <input
           type='url'
-          {...register('company.website', {
+          {...register("company.website", {
             pattern: {
               value: /^https?:\/\/.+/,
-              message: 'URL inválida (incluye http:// o https://)',
+              message: "URL inválida (incluye http:// o https://)",
             },
           })}
           className='w-full px-4 py-3 outline-none border border-gray-500/50 bg-input rounded-lg focus:ring-2 focus:ring-blue-500'
@@ -317,5 +317,5 @@ export default function SecondStep({
         </button>
       </div>
     </div>
-  )
+  );
 }

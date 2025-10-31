@@ -5,16 +5,17 @@ import FirstStep from "./components/FirstStep";
 import SecondStep from "./components/SecondStep";
 import ThirdStep from "./components/ThirdStep";
 import FourthStep from "./components/FourthStep";
+import { StepContext } from "./context";
 interface FormData {
   companyName: string;
   financialInfo: string;
   amount: string;
 }
 // Custom context para manejar el paso del formulario multi-step en los componentes hijos
-export const StepContext = React.createContext<{
-  step: number;
-  setStep: React.Dispatch<React.SetStateAction<number>>;
-} | null>(null);
+// export const StepContext = React.createContext<{
+//   step: number;
+//   setStep: React.Dispatch<React.SetStateAction<number>>;
+// } | null>(null);
 
 export default function Page() {
   const [step, setStep] = React.useState(1);

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export default function PruebaPage() {
   const handleSave = () => {

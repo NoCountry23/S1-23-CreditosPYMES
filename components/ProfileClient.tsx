@@ -70,7 +70,6 @@ const ClientProfile = () => {
       annualRevenue: pyme!.annual_billing_estimated,
     };
 
-
   // const companyData = {
   //   legalName: "Comercial López S.R.L.",
   //   tradeName: "López Distribuidora",
@@ -242,36 +241,36 @@ const ClientProfile = () => {
             <div className=" mb-6 space-x-4 p-2 ">
               <a
                 className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "company"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent  hover:text-gray-700"
-                  }`}
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent  hover:text-gray-700"
+                }`}
                 onClick={() => setActiveTab("company")}
               >
                 Datos de la Empresa
               </a>
               <a
                 className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "contacts"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent  hover:text-gray-700"
-                  }`}
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent  hover:text-gray-700"
+                }`}
                 onClick={() => setActiveTab("contacts")}
               >
                 Contactos
               </a>
               <a
                 className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "documents"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent  hover:text-gray-700"
-                  }`}
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent  hover:text-gray-700"
+                }`}
                 onClick={() => setActiveTab("documents")}
               >
                 Documentos
               </a>
               <a
                 className={`py-4 px-1 border-b-2 hover:cursor-pointer font-medium text-sm transition-colors ${activeTab === "loans"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent  hover:text-gray-700"
-                  }`}
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent  hover:text-gray-700"
+                }`}
                 onClick={() => setActiveTab("loans")}
               >
                 Préstamos
@@ -591,9 +590,9 @@ const ClientProfile = () => {
                               <h3 className="font-bold">{loan.id}</h3>
                               <div
                                 className={`badge ${loan.status === "active"
-                                    ? "badge-info"
-                                    : "badge-success"
-                                  }`}
+                                  ? "badge-info"
+                                  : "badge-success"
+                                }`}
                               >
                                 {loan.status === "active"
                                   ? "Activo"

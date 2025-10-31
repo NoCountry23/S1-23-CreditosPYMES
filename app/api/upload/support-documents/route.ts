@@ -57,17 +57,14 @@ export async function POST(request: NextRequest) {
     const filePath = `${uploaded_by}/${fileName}`;
 
     const { data: publicUrlData  } = await supabase.storage
-     .from("support-documents")
-     .getPublicUrl(filePath)
+      .from("support-documents")
+      .getPublicUrl(filePath);
 
-     const public_url = publicUrlData.publicUrl
-
+    const public_url = publicUrlData.publicUrl;
 
     const { error: uploadError } = await supabase.storage
       .from("support-documents")
       .upload(filePath, file);
-
-      
 
     if (uploadError) {
       return NextResponse.json(

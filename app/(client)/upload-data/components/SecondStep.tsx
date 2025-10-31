@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { StepContext } from "../page";
+import { StepContext } from "../context";
 
 export default function SecondStep() {
   const {
