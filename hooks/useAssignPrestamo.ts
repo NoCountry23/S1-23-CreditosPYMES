@@ -6,7 +6,7 @@ export const useAssignPrestamo = () => {
 
   return useMutation({
     mutationFn: async (prestamoId: string) => {
-      const res = await fetch(`/api/prestamo/${prestamoId}/assign`, { method: "PUT" });
+      const res = await fetch(`/api/prestamo/${prestamoId}/assign`, { method: "PATCH" });
       if (!res.ok) {
         const body = await res.json();
         throw new Error(body.error ?? "No se pudo asignar");

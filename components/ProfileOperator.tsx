@@ -90,14 +90,14 @@ const OperatorProfile = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "approved":
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case "rejected":
-        return <XCircle className="w-4 h-4 text-red-600" />;
-      case "assigned":
-        return <Clock className="w-4 h-4 text-blue-600" />;
-      default:
-        return <Clock className="w-4 h-4 " />;
+    case "approved":
+      return <CheckCircle className="w-4 h-4 text-green-600" />;
+    case "rejected":
+      return <XCircle className="w-4 h-4 text-red-600" />;
+    case "assigned":
+      return <Clock className="w-4 h-4 text-blue-600" />;
+    default:
+      return <Clock className="w-4 h-4 " />;
     }
   };
 

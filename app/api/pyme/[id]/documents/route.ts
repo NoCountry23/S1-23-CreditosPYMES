@@ -2,10 +2,10 @@ import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } =  params;
+    const { id } = await  params;
     const supabase = await createClient();
 
     const { data, error } = await supabase
