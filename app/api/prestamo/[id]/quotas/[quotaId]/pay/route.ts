@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 type PayBody = { amount: number; method?: string; reference?: string; payment_date?: string; };
 const round2 = (x: number) => Math.round(x * 100) / 100;
 
-export async function PATCH(req: Request, { params }: { params: { id: string; quotaId: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; quotaId: string }> }) {
 
   const supabase = await createClient();
   const { id, quotaId } = await params;

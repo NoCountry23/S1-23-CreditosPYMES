@@ -7,7 +7,7 @@ const IdSchema = z.string().uuid();
 
 export async function GET(
   _request: Request,
-  { params }: { params: { pymeId: string } },
+  { params }: { params: Promise<{ pymeId: string }> },
 ) {
   const supabase = await createClient();
   const { pymeId } = await params;

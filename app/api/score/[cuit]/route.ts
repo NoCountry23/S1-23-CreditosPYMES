@@ -32,7 +32,7 @@ type HistorialResponse = {
 /* ------------------------------------------------------------------ */
 const SCORE_INITIAL = 100;
 
-export function calcScore(
+function calcScore(
   situacionMax: number,
   deudaTotal: number,
   tieneProcesoJudicial: boolean
@@ -48,7 +48,7 @@ export function calcScore(
   return Math.max(score, 0);
 }
 
-export function riskLevel(avg: number): string {
+function riskLevel(avg: number): string {
   if (avg > 80) return "Bajo";
   if (avg > 60) return "Moderado";
   if (avg > 40) return "Alto";
