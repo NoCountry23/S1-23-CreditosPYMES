@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function POST(req: Request, context: { params: { quotaId: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ quotaId: string }> }) {
   const { quotaId } = await context.params;
 
   try {

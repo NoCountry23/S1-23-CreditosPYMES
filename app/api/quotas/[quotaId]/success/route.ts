@@ -7,8 +7,8 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function GET(req: Request, { params }: { params: { quotaId: string } }) {
-  const { quotaId } = params;
+export async function GET(req: Request, { params }: { params: Promise < { quotaId: string }> }) {
+  const { quotaId } = await params;
   const url = new URL(req.url);
   const payment_id = url.searchParams.get("payment_id");
 

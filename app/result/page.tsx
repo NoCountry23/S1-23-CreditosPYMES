@@ -2,8 +2,10 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle, XCircle, Clock } from "lucide-react";
+import { Suspense } from "react";
 
-export default function ResultPage() {
+// Componente que usa useSearchParams
+function ResultContent() {
   const searchParams = useSearchParams();
   const status = searchParams.get("status");
   const loanId = searchParams.get("loan");
@@ -40,5 +42,14 @@ export default function ResultPage() {
         </button>
       )}
     </div>
+  );
+}
+
+// Página principal que envuelve el componente en Suspense
+export default function ResultPageContent() {
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <ResultContent />
+    </Suspense>
   );
 }
